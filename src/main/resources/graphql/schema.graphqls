@@ -2,6 +2,11 @@ scalar DateTime
 scalar Currency
 scalar URL
 
+enum ImageFormat {
+    THUMBNAIL,
+    FULLSIZE
+}
+
 type Auction {
     expiresOn: DateTime!
     currentPrice: Currency!
@@ -18,7 +23,7 @@ type Item {
     id: ID!
     title: String!
     description: String!
-    images: [URL!]!
+    images(format: ImageFormat = THUMBNAIL, first: Int): [URL!]!
     auction: Auction!
 }
 

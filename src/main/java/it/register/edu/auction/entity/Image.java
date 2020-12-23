@@ -15,21 +15,21 @@ import lombok.Data;
 @Entity
 public class Image {
 
-  public enum ImageType {
-    THUMBNAIL, FULLSIZE
-  }
-
   @Id
   @GeneratedValue
   private Integer id;
 
   @Enumerated(EnumType.STRING)
-  private ImageType type;
+  private Format format;
 
   private URL url;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ITEM_ID")
   private Item item;
+
+  public enum Format {
+    THUMBNAIL, FULLSIZE
+  }
 
 }
