@@ -23,9 +23,16 @@ public class ItemResolver implements GraphQLResolver<Item> {
   @Autowired
   private ImageRepository imageRepository;
 
-  public List<URL> getImages(Item item, Format format, Integer first) {
-    int pageSize = first != null ? first : Integer.MAX_VALUE;
-    return imageRepository.findByItemIdAndFormat(item.getId(), format, PageRequest.of(0, pageSize))
+  public List<URL> getImages(Item item) {
+    return imageRepository.findByItemIdAndFormat(item.getId(), Format.FULLSIZE)
+        .stream()
+        .map(Image::getUrl)
+        .collect(Collectors.toList());
+  }
+
+  public List<URL> getThumbnails(Item item, Integer limit) {
+    int pageSize = limit != null ? limit : Integer.MAX_VALUE;
+    return imageRepository.findByItemIdAndFormat(item.getId(), Format.THUMBNAIL, PageRequest.of(0, pageSize))
         .stream()
         .map(Image::getUrl)
         .collect(Collectors.toList());
