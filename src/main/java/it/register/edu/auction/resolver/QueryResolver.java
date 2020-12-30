@@ -11,10 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
 
-  @Autowired
-  private ItemRepository itemRepository;
+    private static final int MAX_REQUEST_SIZE = 150;
+    @Autowired
+    private ItemRepository itemRepository;
 
-  public Page<Item> getItems(int page, int size) {
-    return Page.of(itemRepository.findAll(PageRequest.of(page, size)));
-  }
+    public Page<Item> getItems(int page, int size) {
+        return Page.of(itemRepository.findAll(PageRequest.of(page, checkSize(size))));
+    }
+
+    private int checkSize(int size) {
+        if (size > MAX_REQUEST_SIZE) {
+            size = MAX_REQUEST_SIZE;
+        }
+        return size;
+    }
 }
