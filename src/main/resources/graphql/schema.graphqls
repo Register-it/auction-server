@@ -1,37 +1,68 @@
+"A date and time value, represented as a string with the format: `YYYY-MM-DDTHH:MM:SS`"
 scalar DateTime
+"A currency value, represented as a float, e.g. `23.10`"
 scalar Currency
+"A string representing a valid URL"
 scalar URL
 
-type Auction {
-    expiresOn: DateTime!
-    currentPrice: Currency!
-    bidsNumber: Int!
-}
-
-type Bid {
-    user: String!
-    amount: Currency!
-    dateTime: DateTime!
-}
-
+"An item that can be put up for auction"
 type Item {
+    "The unique id of the item"
     id: ID!
+    "The title of the item"
     title: String!
+    "The long description of the item"
     description: String!
-    thumbnails(limit: Int): [URL!]!
+    "An array of image thumbnail urls"
+    thumbnails("If given, limits the number of results" limit: Int): [URL!]!
+    "An array of full-size image urls"
     images: [URL!]!
+    "The auction in which the item is being sold"
     auction: Auction!
 }
 
+"An auction in which a single item can be sold"
+type Auction {
+    "The date and time of the auction expiration"
+    expiresOn: DateTime!
+    "The current price reached by the item in the auction"
+    currentPrice: Currency!
+    "The current number of bids in this auction"
+    bidsNumber: Int!
+}
+
+"A bid made at an auction"
+type Bid {
+    "The bidder"
+    user: String!
+    "The bid amount"
+    amount: Currency!
+    "The date and time of the bid"
+    dateTime: DateTime!
+}
+
+"A page containing a list of items"
 type Page {
+    "The current number of the page (starting at 0)"
     current: Int!
+    "The total number of the pages"
     totalPages: Int!
+    "A boolean value holding true if the current page is the first page"
     isLast: Boolean!
+    "A boolean value holding true if the current page is the last page"
     isFirst: Boolean!
+    "The total number of paged elements"
     totalElements: Int!
+    "The array of elements contained in the current page"
     elements: [Item!]!
 }
 
 type Query {
-    items(page: Int = 0, size: Int = 10): Page!
+    "A paged list of auction items"
+    items(
+        "Required page (defaults to 0, i.e. first page)"
+        page: Int = 0,
+        "Page size (i.e. number of elements in each page), defaults to 10"
+        size: Int = 10
+    ): Page!
 }
