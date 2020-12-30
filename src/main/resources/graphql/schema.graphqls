@@ -17,21 +17,17 @@ type Item {
     thumbnails("If given, limits the number of results" limit: Int): [URL!]!
     "An array of full-size image urls"
     images: [URL!]!
-    "The auction in which the item is being sold"
-    auction: Auction!
-}
-
-"An auction in which a single item can be sold"
-type Auction {
     "The date and time of the auction expiration"
-    expiresOn: DateTime!
+    auctionExpiration: DateTime!
     "The current price reached by the item in the auction"
     currentPrice: Currency!
+    "The initial price of the item in the auction"
+    initialPrice: Currency!
     "The current number of bids in this auction"
     bidsNumber: Int!
 }
 
-"A bid made at an auction"
+"A bid made on an item at an auction"
 type Bid {
     "The bidder"
     user: String!

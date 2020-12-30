@@ -23,7 +23,7 @@ public class Bid {
   @Column(name = "DATE_TIME")
   private LocalDateTime dateTime;
 
-  @Column(name = "AUCTION_ID")
-  private Integer auctionId;
+  @Column(name = "ITEM_ID")
+  private Integer itemId;
 
 }
