@@ -7,7 +7,7 @@ graphql:
     cors:
       allowed-origins:
         - '*'
-      allow-credentials: true
+#      allow-credentials: true
       allowed-methods:
         - '*'
       allowed-headers:
