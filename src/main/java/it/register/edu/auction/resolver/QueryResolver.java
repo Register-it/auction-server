@@ -19,6 +19,12 @@ public class QueryResolver implements GraphQLQueryResolver {
         return Page.of(itemRepository.findAll(PageRequest.of(page, checkSize(size))));
     }
 
+    public Item getItem(int id) {
+        return itemRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("not found"));
+    }
+
+
     private int checkSize(int size) {
         if (size > MAX_REQUEST_SIZE) {
             size = MAX_REQUEST_SIZE;

@@ -61,4 +61,8 @@ type Query {
         "Page size (i.e. number of elements in each page), defaults to 10"
         size: Int = 10
     ): Page!
+
+    "An Item"
+    item(id: ID!): Item
+
 }
