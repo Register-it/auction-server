@@ -1,5 +1,6 @@
 package it.register.edu.auction.domain;
 
+import it.register.edu.auction.exception.IllegalSizeException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -16,7 +17,7 @@ public class LimitedPageRequest extends PageRequest {
   public static PageRequest of(int page, Integer size, int maxSize, Sort sort) {
     int pageSize = size != null ? size : maxSize;
     if (pageSize > maxSize) {
-      throw new IllegalArgumentException("Requested elements number (" + pageSize + ") exceed maximum value of " + maxSize);
+      throw new IllegalSizeException(pageSize, maxSize);
     }
     return new LimitedPageRequest(page, pageSize, sort);
   }
