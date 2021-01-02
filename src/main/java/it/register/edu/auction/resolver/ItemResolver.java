@@ -1,6 +1,7 @@
 package it.register.edu.auction.resolver;
 
 import graphql.kickstart.tools.GraphQLResolver;
+import it.register.edu.auction.domain.LimitedPageRequest;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Image.Format;
 import it.register.edu.auction.entity.Item;
@@ -10,13 +11,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ItemResolver implements GraphQLResolver<Item> {
-
-  private static final int MAX_IMAGES = 50;
 
   @Autowired
   private ImageRepository imageRepository;
@@ -24,6 +23,8 @@ public class ItemResolver implements GraphQLResolver<Item> {
   @Autowired
   private BidRepository bidRepository;
 
+  @Value("${auctions.pagination.max-images}")
+  private int maxImages;
 
   public List<URL> getImages(Item item) {
     return imageRepository.findByItemIdAndFormat(item.getId(), Format.FULLSIZE)
@@ -33,9 +34,8 @@ public class ItemResolver implements GraphQLResolver<Item> {
   }
 
   public List<URL> getThumbnails(Item item, Integer limit) {
-    int pageSize = getPageSize(limit);
     return imageRepository
-        .findByItemIdAndFormat(item.getId(), Format.THUMBNAIL, PageRequest.of(0, pageSize))
+        .findByItemIdAndFormat(item.getId(), Format.THUMBNAIL, LimitedPageRequest.of(0, limit, maxImages))
         .stream()
         .map(Image::getUrl)
         .collect(Collectors.toList());
@@ -45,11 +45,4 @@ public class ItemResolver implements GraphQLResolver<Item> {
     return bidRepository.countByItemId(item.getId());
   }
 
-  private int getPageSize(Integer limit) {
-    int pageSize = limit != null ? limit : MAX_IMAGES;
-    if (pageSize > MAX_IMAGES) {
-      pageSize = MAX_IMAGES;
-    }
-    return pageSize;
-  }
 }

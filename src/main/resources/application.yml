@@ -12,3 +12,7 @@ graphql:
         - '*'
       allowed-headers:
         - '*'
+auctions:
+  pagination:
+    max-items: 150
+    max-images: 50
