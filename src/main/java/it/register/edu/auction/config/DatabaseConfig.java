@@ -3,6 +3,7 @@ package it.register.edu.auction.config;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.sql.DataSource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class DatabaseConfig {
 
   @Bean
+  @ConfigurationProperties("spring.datasource")
   public DataSource getDataSource() throws URISyntaxException {
 
     URI dbUri = new URI(System.getenv("DATABASE_URL"));

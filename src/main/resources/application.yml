@@ -2,9 +2,12 @@ spring:
   jpa:
     show-sql: true
   datasource:
-    hikari:
-      minimumIdle: 5
-      maximumPoolSize: 5
+    minimumIdle: 5
+    maximumPoolSize: 5
+logging:
+  level:
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
 graphql:
   servlet:
     corsEnabled: true
