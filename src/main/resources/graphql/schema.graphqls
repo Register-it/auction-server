@@ -30,7 +30,7 @@ type Item {
 "A bid made on an item at an auction"
 type Bid {
     "The bidder"
-    user: String!
+    username: String!
     "The bid amount"
     amount: Currency!
     "The date and time of the bid"
@@ -64,5 +64,8 @@ type Query {
 
     "An Item"
     item(id: ID!): Item
+
+    "The current bids on an item"
+    bids(itemId: ID!) : [Bid!]!
 
 }
