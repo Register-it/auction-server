@@ -4,10 +4,6 @@ spring:
   datasource:
     minimumIdle: 5
     maximumPoolSize: 5
-logging:
-  level:
-    com.zaxxer.hikari.HikariConfig: DEBUG
-    com.zaxxer.hikari: TRACE
 graphql:
   servlet:
     corsEnabled: true
