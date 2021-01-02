@@ -29,6 +29,8 @@ type Item {
 
 "A bid made on an item at an auction"
 type Bid {
+    "The id of the bid"
+    id: ID!
     "The bidder"
     username: String!
     "The bid amount"
