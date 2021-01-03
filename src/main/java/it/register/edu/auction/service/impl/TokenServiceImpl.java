@@ -8,6 +8,7 @@ import it.register.edu.auction.repository.UserRepository;
 import it.register.edu.auction.service.TokenService;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class TokenServiceImpl implements TokenService {
 
   @Autowired
   private TokenRepository tokenRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public String issueToken(String username, String password) {
@@ -36,8 +40,7 @@ public class TokenServiceImpl implements TokenService {
   }
 
   private void validatePassword(String password, String hash) {
-    // TODO validate password with hash
-    if (!password.equals(hash)) {
+    if (!passwordEncoder.matches(password, hash)) {
       throw new UnauthorizedException();
     }
   }
@@ -45,4 +48,5 @@ public class TokenServiceImpl implements TokenService {
   private String generateToken() {
     return UUID.randomUUID().toString();
   }
+
 }
