@@ -55,8 +55,18 @@ type Page {
     elements: [Item!]!
 }
 
+"A user of the auction service"
+type User {
+    "First name of the user"
+    firstName: String!
+    "Last name of the user"
+    lastName: String!
+    "User profile image"
+    image: URL!
+}
+
 type Query {
-    "A paged list of auction items"
+    "Returns a paged list of auction items"
     items(
         "Required page (defaults to 0, i.e. first page)"
         page: Int = 0,
@@ -64,10 +74,28 @@ type Query {
         size: Int = 10
     ): Page!
 
-    "An Item"
-    item(id: ID!): Item
+    "Returns an item"
+    item(
+        "Id of the required item"
+        id: ID!
+    ): Item
 
-    "The current bids on an item"
-    bids(itemId: ID!) : [Bid!]!
+    "Returns all the bids made on an item"
+    bids(
+        "Id of the item"
+        itemId: ID!
+    ) : [Bid!]!
 
+    "Return the current logged in user"
+    me: User!
+}
+
+type Mutation {
+    "Creates a session for the given user on the server"
+    login(
+        "Username identifying the user that is logging in"
+        username: String!,
+        "Password of the user that is logging in"
+        password: String!
+    ): Boolean
 }

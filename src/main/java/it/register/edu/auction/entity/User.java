@@ -3,30 +3,30 @@ package it.register.edu.auction.entity;
 import java.net.URL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-public class Image {
+@Table(name = "AUCTION_USER")
+public class User {
 
   @Id
   @GeneratedValue
   private int id;
 
-  @Enumerated(EnumType.STRING)
-  private Format format;
+  private String username;
 
-  private URL url;
+  private String password;
 
-  @Column(name = "ITEM_ID")
-  private int itemId;
+  @Column(name = "FIRST_NAME")
+  private String firstName;
 
-  public enum Format {
-    THUMBNAIL, FULLSIZE
-  }
+  @Column(name = "LAST_NAME")
+  private String lastName;
+
+  private URL image;
 
 }

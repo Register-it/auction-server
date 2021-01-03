@@ -5,6 +5,10 @@ spring:
     minimumIdle: 5
     maximumPoolSize: 5
 graphql:
+  playground:
+    settings:
+      request:
+        credentials: include
   servlet:
     corsEnabled: true
     cors:
@@ -19,3 +23,5 @@ auctions:
   pagination:
     max-items: 150
     max-images: 50
+  session:
+    durationInMinutes: 10

@@ -14,7 +14,7 @@ public class Bid {
 
   @Id
   @GeneratedValue
-  private Integer id;
+  private int id;
 
   private String username;
 
@@ -24,6 +24,6 @@ public class Bid {
   private LocalDateTime dateTime;
 
   @Column(name = "ITEM_ID")
-  private Integer itemId;
+  private int itemId;
 
 }

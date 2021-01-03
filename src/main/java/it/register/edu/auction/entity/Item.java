@@ -14,7 +14,7 @@ public class Item {
 
   @Id
   @GeneratedValue
-  private Integer id;
+  private int id;
 
   private String title;
 
