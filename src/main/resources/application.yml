@@ -10,6 +10,7 @@ graphql:
       request:
         credentials: include
   servlet:
+    exception-handlers-enabled: true
     corsEnabled: true
     cors:
       allowed-origins:

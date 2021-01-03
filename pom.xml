@@ -9,7 +9,7 @@
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
-    <graphql-java-kickstart-version>8.1.0</graphql-java-kickstart-version>
+    <graphql-java-kickstart-version>8.1.1</graphql-java-kickstart-version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
