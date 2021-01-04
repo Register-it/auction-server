@@ -1,7 +1,7 @@
 package it.register.edu.auction.util;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
@@ -13,10 +13,10 @@ public class CookieUtils {
   private CookieUtils() {
   }
 
-  public static void setCookie(HttpServletResponse response, String name, String value, TemporalAmount duration) {
+  public static void setCookie(HttpServletResponse response, String name, String value, LocalDateTime expiresAt) {
     Cookie cookie = new Cookie(name, value);
     cookie.setHttpOnly(true);
-    cookie.setMaxAge((int) duration.get(ChronoUnit.SECONDS));
+    cookie.setMaxAge((int) ChronoUnit.SECONDS.between(LocalDateTime.now(), expiresAt));
     response.addCookie(cookie);
   }
 

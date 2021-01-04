@@ -1,5 +1,6 @@
 package it.register.edu.auction.entity;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,5 +21,8 @@ public class Token {
 
   @Column(name = "USER_ID")
   private int userId;
+
+  @Column(name = "EXPIRES_AT")
+  private LocalDateTime expiresAt;
 
 }

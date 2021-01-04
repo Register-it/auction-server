@@ -1,7 +1,7 @@
 package it.register.edu.auction.config;
 
 import it.register.edu.auction.filter.TokenAuthorizationFilter;
-import it.register.edu.auction.service.TokenService;
+import it.register.edu.auction.service.UserSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private TokenService tokenService;
+  private UserSessionService userSessionService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilter(new TokenAuthorizationFilter(authenticationManager(), tokenService))
+        .addFilter(new TokenAuthorizationFilter(authenticationManager(), userSessionService))
         .authorizeRequests()
         .antMatchers("/", "/graphql", "/playground", "/vendor/playground/**/*").permitAll()
         .anyRequest().authenticated()

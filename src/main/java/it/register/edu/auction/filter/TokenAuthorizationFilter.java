@@ -1,10 +1,10 @@
 package it.register.edu.auction.filter;
 
-import static it.register.edu.auction.service.TokenService.ROLE_AUTHENTICATED;
+import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;
 import static it.register.edu.auction.util.CookieUtils.getToken;
 
 import it.register.edu.auction.entity.User;
-import it.register.edu.auction.service.TokenService;
+import it.register.edu.auction.service.UserSessionService;
 import java.io.IOException;
 import java.util.Collections;
 import javax.servlet.FilterChain;
@@ -22,17 +22,17 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Slf4j
 public class TokenAuthorizationFilter extends BasicAuthenticationFilter {
 
-  private final TokenService tokenService;
+  private final UserSessionService userSessionService;
 
-  public TokenAuthorizationFilter(AuthenticationManager authManager, TokenService tokenService) {
+  public TokenAuthorizationFilter(AuthenticationManager authManager, UserSessionService userSessionService) {
     super(authManager);
-    this.tokenService = tokenService;
+    this.userSessionService = userSessionService;
   }
 
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-    getToken(req, TokenService.COOKIE_NAME)
+    getToken(req, UserSessionService.COOKIE_NAME)
         .ifPresent(s -> SecurityContextHolder.getContext().setAuthentication(getAuthentication(s)));
 
     chain.doFilter(req, res);
@@ -40,7 +40,7 @@ public class TokenAuthorizationFilter extends BasicAuthenticationFilter {
 
   private Authentication getAuthentication(String token) {
     try {
-      User user = tokenService.validateToken(token);
+      User user = userSessionService.validateSessionToken(token);
       return new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(ROLE_AUTHENTICATED)));
     } catch (Exception e) {
       return null;

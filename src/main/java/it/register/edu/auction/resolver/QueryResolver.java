@@ -9,7 +9,7 @@ import it.register.edu.auction.entity.User;
 import it.register.edu.auction.repository.BidRepository;
 import it.register.edu.auction.repository.ItemRepository;
 import it.register.edu.auction.repository.UserRepository;
-import it.register.edu.auction.service.TokenService;
+import it.register.edu.auction.service.UserSessionService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     return bidRepository.findByItemId(itemId);
   }
 
-  @Secured(TokenService.ROLE_AUTHENTICATED)
+  @Secured(UserSessionService.ROLE_AUTHENTICATED)
   public User me() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
