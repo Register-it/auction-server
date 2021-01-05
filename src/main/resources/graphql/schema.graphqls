@@ -98,4 +98,10 @@ type Mutation {
         "Password of the user that is logging in"
         password: String!
     ): Boolean
+
+    "Adds an item to the watchlist of the current logged in user"
+    watch(
+        "Id of the item to watch"
+        itemId: ID!
+    ): Boolean
 }
