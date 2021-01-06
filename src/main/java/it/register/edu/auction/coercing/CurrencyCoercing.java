@@ -1,14 +1,11 @@
 package it.register.edu.auction.coercing;
 
 import graphql.language.FloatValue;
-import graphql.language.StringValue;
 import graphql.schema.Coercing;
 import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class CurrencyCoercing implements Coercing<BigDecimal, Float> {
 

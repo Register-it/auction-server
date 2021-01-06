@@ -25,8 +25,8 @@ public interface AuctionService {
 
   List<URL> getImageUrls(int itemId, Format format, Pageable pageable);
 
-  Optional<Bid> bid(int itemId, BigDecimal amount);
-
   Optional<User> getUser(int id);
+
+  Bid bid(int userId, int itemId, BigDecimal amount);
 
 }

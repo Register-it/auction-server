@@ -1,6 +1,7 @@
 spring:
   jpa:
     show-sql: true
+    open-in-view: false
   datasource:
     minimumIdle: 5
     maximumPoolSize: 5

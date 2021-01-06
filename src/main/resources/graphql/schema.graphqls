@@ -112,7 +112,15 @@ type Mutation {
 
     "Removes an item from the watchlist of the current logged in user"
     unwatch(
-        "Id of the item to watch"
+        "Id of the item"
         itemId: ID!
     ): Boolean
+
+    "Make a bid for an item, returns the last valid bid for this auction (if any)"
+    bid(
+        "Id of the item"
+        itemId: ID!,
+        "Amount of the bid"
+        amount: Currency!
+    ): Bid
 }

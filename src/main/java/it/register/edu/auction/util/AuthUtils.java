@@ -1,7 +1,9 @@
 package it.register.edu.auction.util;
 
 import it.register.edu.auction.entity.User;
+import java.util.Optional;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthUtils {
@@ -10,15 +12,19 @@ public class AuthUtils {
   }
 
   public static User getLoggedUser() {
-    try {
-      return (User) getAuthentication().getPrincipal();
-    } catch (Exception e) {
-      return null;
-    }
+    return (User) getAuthentication().getPrincipal();
+  }
+
+  public static Optional<User> getUserWithRole(String role) {
+    return userHasRole(role) ? Optional.of(getLoggedUser()) : Optional.empty();
   }
 
   public static String getSessionToken() {
     return (String) getAuthentication().getCredentials();
+  }
+
+  private static boolean userHasRole(String role) {
+    return getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(role));
   }
 
   private static Authentication getAuthentication() {

@@ -1,6 +1,7 @@
 package it.register.edu.auction.resolver;
 
-import static it.register.edu.auction.util.AuthUtils.getLoggedUser;
+import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;
+import static it.register.edu.auction.util.AuthUtils.getUserWithRole;
 
 import graphql.kickstart.tools.GraphQLResolver;
 import it.register.edu.auction.domain.LimitedPageRequest;
@@ -10,7 +11,6 @@ import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,8 +40,9 @@ public class ItemResolver implements GraphQLResolver<Item> {
   }
 
   public Boolean isWatched(Item item) {
-    return Optional.ofNullable(getLoggedUser())
+    return getUserWithRole(ROLE_AUTHENTICATED)
         .map(user -> watchlistService.isInWatchlist(user.getId(), item.getId()))
         .orElse(null);
   }
+
 }
