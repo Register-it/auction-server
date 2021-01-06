@@ -4,6 +4,8 @@ import it.register.edu.auction.domain.Page;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Image.Format;
 import it.register.edu.auction.entity.Item;
+import it.register.edu.auction.entity.User;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -22,5 +24,9 @@ public interface AuctionService {
   List<URL> getImageUrls(int itemId, Format format);
 
   List<URL> getImageUrls(int itemId, Format format, Pageable pageable);
+
+  Optional<Bid> bid(int itemId, BigDecimal amount);
+
+  Optional<User> getUser(int id);
 
 }

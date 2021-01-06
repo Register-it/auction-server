@@ -16,8 +16,6 @@ public class Bid {
   @GeneratedValue
   private int id;
 
-  private String username;
-
   private BigDecimal amount;
 
   @Column(name = "DATE_TIME")
@@ -26,4 +24,6 @@ public class Bid {
   @Column(name = "ITEM_ID")
   private int itemId;
 
+  @Column(name = "USER_ID")
+  private int userId;
 }
