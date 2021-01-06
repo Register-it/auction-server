@@ -3,6 +3,8 @@ package it.register.edu.auction.resolver;
 import static it.register.edu.auction.service.UserSessionService.COOKIE_NAME;
 import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;
 import static it.register.edu.auction.util.AuthUtils.getLoggedUser;
+import static it.register.edu.auction.util.AuthUtils.getSessionToken;
+import static it.register.edu.auction.util.CookieUtils.deleteCookie;
 import static it.register.edu.auction.util.CookieUtils.setCookie;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
@@ -32,7 +34,14 @@ public class MutationResolver implements GraphQLMutationResolver {
   }
 
   @Secured(ROLE_AUTHENTICATED)
+  public void logout() {
+    userSessionService.deleteSessionToken(getSessionToken());
+    deleteCookie(response, COOKIE_NAME);
+  }
+
+  @Secured(ROLE_AUTHENTICATED)
   public void watch(int itemId) {
     watchlistService.addToWatchlist(getLoggedUser().getId(), itemId);
   }
+
 }

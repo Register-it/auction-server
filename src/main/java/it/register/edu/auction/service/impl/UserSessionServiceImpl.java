@@ -39,8 +39,15 @@ public class UserSessionServiceImpl implements UserSessionService {
 
   @Override
   public User validateSessionToken(String token) {
-    Token userToken = tokenRepository.findByIdAndExpiresAtAfter(token, LocalDateTime.now()).orElseThrow(UnauthorizedException::new);
-    return userRepository.findById(userToken.getUserId()).orElseThrow(UnauthorizedException::new);
+    return tokenRepository.findByIdAndExpiresAtAfter(token, LocalDateTime.now())
+        .flatMap(userToken -> userRepository.findById(userToken.getUserId()))
+        .orElseThrow(UnauthorizedException::new);
+  }
+
+  @Override
+  @Transactional
+  public void deleteSessionToken(String token) {
+    tokenRepository.deleteById(token);
   }
 
   @Override

@@ -14,13 +14,15 @@ public class CookieUtils {
   }
 
   public static void setCookie(HttpServletResponse response, String name, String value, LocalDateTime expiresAt) {
-    Cookie cookie = new Cookie(name, value);
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge((int) ChronoUnit.SECONDS.between(LocalDateTime.now(), expiresAt));
-    response.addCookie(cookie);
+    setCookie(response, name, value, (int) ChronoUnit.SECONDS.between(LocalDateTime.now(), expiresAt));
+  }
+
+  public static void deleteCookie(HttpServletResponse response, String name) {
+    setCookie(response, name, "", 0);
   }
 
   public static Optional<String> getToken(HttpServletRequest request, String name) {
+
     if (request.getCookies() == null) {
       return Optional.empty();
     }
@@ -29,6 +31,13 @@ public class CookieUtils {
         .filter(cookie -> cookie.getName().equals(name))
         .map(Cookie::getValue)
         .findAny();
+  }
+
+  private static void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    Cookie cookie = new Cookie(name, value);
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(maxAge);
+    response.addCookie(cookie);
   }
 
 }

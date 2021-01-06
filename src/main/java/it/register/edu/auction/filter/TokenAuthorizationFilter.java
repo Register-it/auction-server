@@ -41,7 +41,7 @@ public class TokenAuthorizationFilter extends BasicAuthenticationFilter {
   private Authentication getAuthentication(String token) {
     try {
       User user = userSessionService.validateSessionToken(token);
-      return new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(ROLE_AUTHENTICATED)));
+      return new UsernamePasswordAuthenticationToken(user, token, Collections.singleton(new SimpleGrantedAuthority(ROLE_AUTHENTICATED)));
     } catch (Exception e) {
       return null;
     }

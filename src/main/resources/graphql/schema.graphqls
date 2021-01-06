@@ -17,14 +17,16 @@ type Item {
     thumbnails("If given, limits the number of results" limit: Int): [URL!]!
     "An array of full-size image urls"
     images: [URL!]!
-    "The date and time of the auction expiration"
+    "The date and time of the expiration of the auction for this item"
     auctionExpiration: DateTime!
     "The current price reached by the item in the auction"
     currentPrice: Currency!
     "The initial price of the item in the auction"
     initialPrice: Currency!
-    "The current number of bids in this auction"
+    "The current number of bids in the auction for this item"
     bidsNumber: Int!
+    "Tells if this item is in the watchlist of the current logged in user (null if there is no user session available)"
+    watched: Boolean
 }
 
 "A bid made on an item at an auction"
@@ -91,13 +93,16 @@ type Query {
 }
 
 type Mutation {
-    "Creates a session for the given user on the server"
+    "Sign in the user identified by the given credentials"
     login(
         "Username identifying the user that is logging in"
         username: String!,
         "Password of the user that is logging in"
         password: String!
     ): Boolean
+
+    "Logs out the current user"
+    logout: Boolean
 
     "Adds an item to the watchlist of the current logged in user"
     watch(

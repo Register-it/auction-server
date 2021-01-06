@@ -4,4 +4,6 @@ public interface WatchlistService {
 
   void addToWatchlist(int userId, int itemId);
 
+  boolean isInWatchlist(int userId, int itemId);
+
 }

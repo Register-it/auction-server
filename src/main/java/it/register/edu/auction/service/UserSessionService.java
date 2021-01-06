@@ -12,6 +12,8 @@ public interface UserSessionService {
 
   User validateSessionToken(String token);
 
+  void deleteSessionToken(String token);
+
   void deleteExpiredSessionTokens();
 
 }

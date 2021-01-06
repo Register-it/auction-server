@@ -17,4 +17,9 @@ public class WatchlistServiceImpl implements WatchlistService {
     watchlistRepository.save(WatchlistEntry.builder().userId(userId).itemId(itemId).build());
   }
 
+  @Override
+  public boolean isInWatchlist(int userId, int itemId) {
+    return watchlistRepository.findByUserIdAndItemId(userId, itemId).isPresent();
+  }
+
 }
