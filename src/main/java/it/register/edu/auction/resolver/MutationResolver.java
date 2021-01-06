@@ -44,4 +44,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     watchlistService.addToWatchlist(getLoggedUser().getId(), itemId);
   }
 
+  @Secured(ROLE_AUTHENTICATED)
+  public void unwatch(int itemId) {
+    watchlistService.removeFromWatchlist(getLoggedUser().getId(), itemId);
+  }
+
 }

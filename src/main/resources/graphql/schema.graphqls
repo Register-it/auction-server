@@ -109,4 +109,10 @@ type Mutation {
         "Id of the item to watch"
         itemId: ID!
     ): Boolean
+
+    "Removes an item from the watchlist of the current logged in user"
+    unwatch(
+        "Id of the item to watch"
+        itemId: ID!
+    ): Boolean
 }

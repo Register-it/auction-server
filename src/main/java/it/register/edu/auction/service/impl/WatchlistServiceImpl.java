@@ -3,6 +3,7 @@ package it.register.edu.auction.service.impl;
 import it.register.edu.auction.entity.WatchlistEntry;
 import it.register.edu.auction.repository.WatchlistRepository;
 import it.register.edu.auction.service.WatchlistService;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,12 @@ public class WatchlistServiceImpl implements WatchlistService {
   @Override
   public void addToWatchlist(int userId, int itemId) {
     watchlistRepository.save(WatchlistEntry.builder().userId(userId).itemId(itemId).build());
+  }
+
+  @Override
+  @Transactional
+  public void removeFromWatchlist(int userId, int itemId) {
+    watchlistRepository.deleteByUserIdAndItemId(userId, itemId);
   }
 
   @Override

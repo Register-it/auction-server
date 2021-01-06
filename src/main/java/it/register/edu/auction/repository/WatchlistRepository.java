@@ -10,4 +10,6 @@ public interface WatchlistRepository extends JpaRepository<WatchlistEntry, Integ
 
   Optional<WatchlistEntry> findByUserIdAndItemId(int userId, int itemId);
 
+  void deleteByUserIdAndItemId(int userId, int itemId);
+
 }
