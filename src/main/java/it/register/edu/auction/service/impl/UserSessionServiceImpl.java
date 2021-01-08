@@ -2,6 +2,7 @@ package it.register.edu.auction.service.impl;
 
 import it.register.edu.auction.entity.Token;
 import it.register.edu.auction.entity.User;
+import it.register.edu.auction.exception.InvalidCredentialsException;
 import it.register.edu.auction.exception.UnauthorizedException;
 import it.register.edu.auction.repository.TokenRepository;
 import it.register.edu.auction.repository.UserRepository;
@@ -32,7 +33,7 @@ public class UserSessionServiceImpl implements UserSessionService {
 
   @Override
   public Token issueSessionToken(String username, String password) {
-    User user = userRepository.findByUsername(username).orElseThrow(UnauthorizedException::new);
+    User user = userRepository.findByUsername(username).orElseThrow(InvalidCredentialsException::new);
     validatePassword(password, user.getPassword());
     return tokenRepository.save(Token.builder().id(generateToken()).userId(user.getId()).expiresAt(getTokenExpiration()).build());
   }
@@ -58,7 +59,7 @@ public class UserSessionServiceImpl implements UserSessionService {
 
   private void validatePassword(String password, String hash) {
     if (!passwordEncoder.matches(password, hash)) {
-      throw new UnauthorizedException();
+      throw new InvalidCredentialsException();
     }
   }
 
