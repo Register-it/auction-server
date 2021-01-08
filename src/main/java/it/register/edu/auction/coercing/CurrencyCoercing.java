@@ -7,12 +7,12 @@ import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 import java.math.BigDecimal;
 
-public class CurrencyCoercing implements Coercing<BigDecimal, Float> {
+public class CurrencyCoercing implements Coercing<BigDecimal, Double> {
 
   @Override
-  public Float serialize(Object dataFetcherResult) {
+  public Double serialize(Object dataFetcherResult) {
     try {
-      return ((BigDecimal) dataFetcherResult).floatValue();
+      return ((BigDecimal) dataFetcherResult).doubleValue();
     } catch (Exception e) {
       throw new CoercingSerializeException(e);
     }
