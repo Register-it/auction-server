@@ -21,7 +21,7 @@ public class CurrencyCoercing implements Coercing<BigDecimal, Float> {
   @Override
   public BigDecimal parseValue(Object input) {
     try {
-      return BigDecimal.valueOf((Float) input);
+      return BigDecimal.valueOf((Double) input);
     } catch (Exception e) {
       throw new CoercingParseValueException(e);
     }
