@@ -1,5 +1,6 @@
 package it.register.edu.auction.service.impl;
 
+import it.register.edu.auction.domain.BidsNumber;
 import it.register.edu.auction.domain.Page;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Image;
@@ -15,12 +16,12 @@ import it.register.edu.auction.repository.ItemRepository;
 import it.register.edu.auction.repository.UserRepository;
 import it.register.edu.auction.service.AuctionService;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -57,18 +58,22 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public int getBidsNumber(int itemId) {
-    return bidRepository.countByItemId(itemId);
+  public Map<Integer, Integer> getBidsNumber(Collection<Integer> itemIds) {
+    return bidRepository.countByItemIdInGroupByItemId(itemIds)
+        .stream()
+        .collect(Collectors.toMap(BidsNumber::getItemId, BidsNumber::getTotal));
   }
 
   @Override
-  public List<URL> getImageUrls(int itemId, Format format) {
-    return toUrlList(imageRepository.findByItemIdAndFormat(itemId, format).stream());
+  public Map<Integer, List<Image>> getImages(Collection<Integer> itemIds, Format format) {
+    return imageRepository.findByItemIdInAndFormat(itemIds, format).stream()
+        .collect(Collectors.groupingBy(Image::getItemId));
   }
 
   @Override
-  public List<URL> getImageUrls(int itemId, Format format, Pageable pageable) {
-    return toUrlList(imageRepository.findByItemIdAndFormat(itemId, format, pageable).stream());
+  public Map<Integer, List<Image>> getImages(Collection<Integer> itemIds, Format format, Pageable pageable) {
+    return imageRepository.findByItemIdInAndFormatAndLimit(itemIds, format, pageable.getPageSize()).stream()
+        .collect(Collectors.groupingBy(Image::getItemId));
   }
 
   @Override
@@ -112,9 +117,4 @@ public class AuctionServiceImpl implements AuctionService {
     return bid;
   }
 
-  private List<URL> toUrlList(Stream<Image> images) {
-    return images
-        .map(Image::getUrl)
-        .collect(Collectors.toList());
-  }
 }

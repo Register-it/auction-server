@@ -4,11 +4,16 @@ import graphql.schema.GraphQLScalarType;
 import it.register.edu.auction.coercing.CurrencyCoercing;
 import it.register.edu.auction.coercing.DateTimeCoercing;
 import it.register.edu.auction.coercing.URLCoercing;
+import it.register.edu.auction.service.AuctionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GraphQLConfig {
+
+  @Autowired
+  private AuctionService auctionService;
 
   @Bean
   public GraphQLScalarType dateTimeScalar() {
@@ -36,4 +41,5 @@ public class GraphQLConfig {
         .coercing(new URLCoercing())
         .build();
   }
+
 }
