@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class UnauthorizedException extends GraphQLDataFetchingException {
 
+  private static final long serialVersionUID = -5556206905686318471L;
+
   public UnauthorizedException() {
     super("Unauthorized");
   }

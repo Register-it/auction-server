@@ -7,6 +7,8 @@ import lombok.Getter;
 
 public class HigherBidExistsException extends GraphQLDataFetchingException {
 
+  private static final long serialVersionUID = 1376742873974860123L;
+
   @Getter
   private final Bid bid;
 

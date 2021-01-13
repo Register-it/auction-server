@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class ExpiredAuctionException extends GraphQLDataFetchingException {
 
+  private static final long serialVersionUID = -3274260905917874491L;
+
   public ExpiredAuctionException() {
     super("The auction is expired");
   }

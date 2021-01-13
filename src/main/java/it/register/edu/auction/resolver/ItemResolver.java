@@ -11,6 +11,7 @@ import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.domain.LimitedPageRequest;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Item;
+import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
 import java.net.URL;
@@ -48,7 +49,7 @@ public class ItemResolver implements GraphQLResolver<Item> {
 
   public Boolean isWatched(Item item) {
     return getUserWithRole(ROLE_AUTHENTICATED)
-        .map(user -> watchlistService.isInWatchlist(user.getId(), item.getId()))
+        .map(user -> watchlistService.isInWatchlist(new WatchlistId(user.getId(), item.getId())))
         .orElse(null);
   }
 

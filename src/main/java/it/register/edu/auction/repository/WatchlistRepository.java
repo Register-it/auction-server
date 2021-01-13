@@ -1,15 +1,11 @@
 package it.register.edu.auction.repository;
 
 import it.register.edu.auction.entity.WatchlistEntry;
-import java.util.Optional;
+import it.register.edu.auction.entity.WatchlistId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WatchlistRepository extends JpaRepository<WatchlistEntry, Integer> {
-
-  Optional<WatchlistEntry> findByUserIdAndItemId(int userId, int itemId);
-
-  void deleteByUserIdAndItemId(int userId, int itemId);
+public interface WatchlistRepository extends JpaRepository<WatchlistEntry, WatchlistId> {
 
 }

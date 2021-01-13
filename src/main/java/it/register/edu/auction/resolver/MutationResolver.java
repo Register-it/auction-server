@@ -16,6 +16,7 @@ import graphql.language.SourceLocation;
 import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Token;
+import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.exception.GraphQLDataFetchingException;
 import it.register.edu.auction.exception.HigherBidExistsException;
 import it.register.edu.auction.service.AuctionService;
@@ -60,7 +61,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 
   @Secured(ROLE_AUTHENTICATED)
   public void unwatch(int itemId) {
-    watchlistService.removeFromWatchlist(getLoggedUser().getId(), itemId);
+    watchlistService.removeFromWatchlist(new WatchlistId(getLoggedUser().getId(), itemId));
   }
 
   @Secured(ROLE_AUTHENTICATED)

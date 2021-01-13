@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class InvalidCredentialsException extends GraphQLDataFetchingException {
 
+  private static final long serialVersionUID = 1142874302466474894L;
+
   public InvalidCredentialsException() {
     super("Invalid credentials");
   }

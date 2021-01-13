@@ -1,6 +1,7 @@
 package it.register.edu.auction.service.impl;
 
 import it.register.edu.auction.entity.WatchlistEntry;
+import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.repository.WatchlistRepository;
 import it.register.edu.auction.service.WatchlistService;
 import javax.transaction.Transactional;
@@ -20,13 +21,13 @@ public class WatchlistServiceImpl implements WatchlistService {
 
   @Override
   @Transactional
-  public void removeFromWatchlist(int userId, int itemId) {
-    watchlistRepository.deleteByUserIdAndItemId(userId, itemId);
+  public void removeFromWatchlist(WatchlistId id) {
+    watchlistRepository.deleteById(id);
   }
 
   @Override
-  public boolean isInWatchlist(int userId, int itemId) {
-    return watchlistRepository.findByUserIdAndItemId(userId, itemId).isPresent();
+  public boolean isInWatchlist(WatchlistId id) {
+    return watchlistRepository.findById(id).isPresent();
   }
 
 }
