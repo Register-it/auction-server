@@ -1,39 +1,63 @@
 package it.register.edu.auction.coercing;
 
 import graphql.language.FloatValue;
+import graphql.language.IntValue;
 import graphql.schema.Coercing;
 import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
-
 import java.math.BigDecimal;
 
 public class CurrencyCoercing implements Coercing<BigDecimal, Double> {
 
   @Override
   public Double serialize(Object dataFetcherResult) {
-    try {
-      return ((BigDecimal) dataFetcherResult).doubleValue();
-    } catch (Exception e) {
-      throw new CoercingSerializeException(e);
+    BigDecimal result = convert(dataFetcherResult);
+    if (result == null) {
+      throw new CoercingSerializeException("Expected type 'BigDecimal' but was '" + typeName(dataFetcherResult) + "'.");
     }
+    return result.doubleValue();
   }
 
   @Override
   public BigDecimal parseValue(Object input) {
-    try {
-      return BigDecimal.valueOf(Double.parseDouble(input.toString()));
-    } catch (Exception e) {
-      throw new CoercingParseValueException(e);
+    BigDecimal result = convert(input);
+    if (result == null) {
+      throw new CoercingParseValueException("Expected type 'Float' but was '" + typeName(input) + "'.");
     }
+    return result;
   }
 
   @Override
   public BigDecimal parseLiteral(Object input) {
-    try {
+    if (input instanceof IntValue) {
+      return new BigDecimal(((IntValue) input).getValue());
+    } else if (input instanceof FloatValue) {
       return ((FloatValue) input).getValue();
-    } catch (Exception e) {
-      throw new CoercingParseLiteralException(e);
     }
+    throw new CoercingParseLiteralException("Expected AST type 'IntValue' or 'FloatValue' but was '" + typeName(input) + "'.");
+  }
+
+  private BigDecimal convert(Object input) {
+    if (isNumber(input)) {
+      try {
+        return new BigDecimal(input.toString());
+      } catch (NumberFormatException e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  private boolean isNumber(Object input) {
+    return input instanceof Number || input instanceof String;
+  }
+
+  private String typeName(Object input) {
+    if (input == null) {
+      return "null";
+    }
+
+    return input.getClass().getSimpleName();
   }
 }
