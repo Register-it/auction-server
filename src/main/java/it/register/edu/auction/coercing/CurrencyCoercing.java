@@ -5,6 +5,7 @@ import graphql.schema.Coercing;
 import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
+
 import java.math.BigDecimal;
 
 public class CurrencyCoercing implements Coercing<BigDecimal, Double> {
@@ -21,7 +22,7 @@ public class CurrencyCoercing implements Coercing<BigDecimal, Double> {
   @Override
   public BigDecimal parseValue(Object input) {
     try {
-      return BigDecimal.valueOf((Double) input);
+      return BigDecimal.valueOf(Double.parseDouble(input.toString()));
     } catch (Exception e) {
       throw new CoercingParseValueException(e);
     }
