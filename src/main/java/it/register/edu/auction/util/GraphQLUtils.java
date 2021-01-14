@@ -37,4 +37,8 @@ public class GraphQLUtils {
   public static DataLoader<Integer, Integer> bidsNumberDataLoader(DataFetchingEnvironment env) {
     return getDataLoader(env, "bidsNumberDataLoader");
   }
+
+  public static DataLoader<Integer, Boolean> watchlistDataLoader(DataFetchingEnvironment env) {
+    return getDataLoader(env, "watchlistDataLoader");
+  }
 }

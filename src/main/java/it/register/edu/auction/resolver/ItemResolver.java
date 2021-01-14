@@ -5,13 +5,13 @@ import static it.register.edu.auction.util.AuthUtils.getUserWithRole;
 import static it.register.edu.auction.util.GraphQLUtils.bidsNumberDataLoader;
 import static it.register.edu.auction.util.GraphQLUtils.imageDataLoader;
 import static it.register.edu.auction.util.GraphQLUtils.thumbnailDataLoader;
+import static it.register.edu.auction.util.GraphQLUtils.watchlistDataLoader;
 
 import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.domain.LimitedPageRequest;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Item;
-import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
 import java.net.URL;
@@ -47,10 +47,10 @@ public class ItemResolver implements GraphQLResolver<Item> {
     return bidsNumberDataLoader(env).load(item.getId()).thenApply(number -> number != null ? number : 0);
   }
 
-  public Boolean isWatched(Item item) {
+  public CompletableFuture<Boolean> isWatched(Item item, DataFetchingEnvironment env) {
     return getUserWithRole(ROLE_AUTHENTICATED)
-        .map(user -> watchlistService.isInWatchlist(new WatchlistId(user.getId(), item.getId())))
-        .orElse(null);
+        .map(user -> watchlistDataLoader(env).load(item.getId(), user.getId()))
+        .orElse(CompletableFuture.completedFuture(null));
   }
 
   private List<URL> getUrl(List<Image> images) {

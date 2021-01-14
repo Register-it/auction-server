@@ -4,6 +4,9 @@ import it.register.edu.auction.entity.WatchlistEntry;
 import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.repository.WatchlistRepository;
 import it.register.edu.auction.service.WatchlistService;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +29,15 @@ public class WatchlistServiceImpl implements WatchlistService {
   }
 
   @Override
-  public boolean isInWatchlist(WatchlistId id) {
-    return watchlistRepository.findById(id).isPresent();
+  public List<Boolean> areInWatchlist(int userId, Collection<Integer> itemIds) {
+    List<Integer> watched = watchlistRepository.findByUserIdAndItemIdIn(userId, itemIds)
+        .stream()
+        .map(WatchlistEntry::getItemId)
+        .collect(Collectors.toList());
+
+    return itemIds.stream()
+        .map(watched::contains)
+        .collect(Collectors.toList());
   }
 
 }

@@ -4,6 +4,7 @@ import it.register.edu.auction.annotation.GraphQLDataLoader;
 import it.register.edu.auction.builder.DataLoaderBuilder;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Image.Format;
+import it.register.edu.auction.exception.IllegalDataLoaderUsageException;
 import it.register.edu.auction.service.AuctionService;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,7 +23,13 @@ public class ThumbnailDataLoader implements DataLoaderBuilder<Integer, List<Imag
   @Override
   public DataLoader<Integer, List<Image>> build() {
     return DataLoader.newMappedDataLoader((itemIds, env) -> {
-      Pageable pageable = (Pageable) env.getKeyContexts().values().stream().findAny().orElse(null);
+      Pageable pageable = (Pageable) env.getKeyContexts().values().stream()
+          .distinct()
+          .reduce((a, b) -> {
+            throw new IllegalDataLoaderUsageException("ThumbnailDataLoader must have the same pageable context for every load() call in a request");
+          })
+          .orElse(null);
+
       return CompletableFuture.supplyAsync(() -> auctionService.getImages(itemIds, Format.THUMBNAIL, pageable));
     });
   }
