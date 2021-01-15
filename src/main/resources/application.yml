@@ -5,6 +5,10 @@ spring:
   datasource:
     minimumIdle: 5
     maximumPoolSize: 5
+  cache:
+    cache-names: sessionToken
+    caffeine:
+      spec: expireAfterWrite=60s
 graphql:
   playground:
     settings:

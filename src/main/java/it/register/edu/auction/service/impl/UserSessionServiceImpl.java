@@ -13,6 +13,8 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ public class UserSessionServiceImpl implements UserSessionService {
   }
 
   @Override
+  @Cacheable("sessionToken")
   public User validateSessionToken(String token) {
     return tokenRepository.findByIdAndExpiresAtAfter(token, LocalDateTime.now())
         .flatMap(userToken -> userRepository.findById(userToken.getUserId()))
@@ -47,6 +50,7 @@ public class UserSessionServiceImpl implements UserSessionService {
 
   @Override
   @Transactional
+  @CacheEvict("sessionToken")
   public void deleteSessionToken(String token) {
     tokenRepository.deleteById(token);
   }
