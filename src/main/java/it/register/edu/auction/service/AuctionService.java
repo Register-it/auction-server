@@ -27,7 +27,7 @@ public interface AuctionService {
 
   Map<Integer, List<Image>> getImages(Collection<Integer> itemIds, Format format, Pageable pageable);
 
-  Optional<User> getUser(int id);
+  Map<Integer, User> getUsers(Collection<Integer> userIds);
 
   Bid bid(int userId, int itemId, BigDecimal amount);
 

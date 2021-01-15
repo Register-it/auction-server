@@ -77,8 +77,10 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public Optional<User> getUser(int id) {
-    return userRepository.findById(id);
+  public Map<Integer, User> getUsers(Collection<Integer> userIds) {
+    return userRepository.findAllById(userIds)
+        .stream()
+        .collect(Collectors.toMap(User::getId, u -> u));
   }
 
   @Override

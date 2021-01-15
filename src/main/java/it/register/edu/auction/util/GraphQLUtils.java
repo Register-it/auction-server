@@ -3,6 +3,7 @@ package it.register.edu.auction.util;
 import graphql.kickstart.execution.context.GraphQLContext;
 import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.entity.Image;
+import it.register.edu.auction.entity.User;
 import it.register.edu.auction.exception.MissingDataLoaderException;
 import java.util.List;
 import java.util.Optional;
@@ -40,5 +41,9 @@ public class GraphQLUtils {
 
   public static DataLoader<Integer, Boolean> watchlistDataLoader(DataFetchingEnvironment env) {
     return getDataLoader(env, "watchlistDataLoader");
+  }
+
+  public static DataLoader<Integer, User> userDataLoader(DataFetchingEnvironment env) {
+    return getDataLoader(env, "userDataLoader");
   }
 }
