@@ -18,16 +18,19 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
+  @Column(name = "USERNAME", nullable = false)
   private String username;
 
+  @Column(name = "PASSWORD", nullable = false)
   private String password;
 
-  @Column(name = "FIRST_NAME")
+  @Column(name = "FIRST_NAME", nullable = false)
   private String firstName;
 
-  @Column(name = "LAST_NAME")
+  @Column(name = "LAST_NAME", nullable = false)
   private String lastName;
 
+  @Column(name = "IMAGE", nullable = false)
   private URL image;
 
 }

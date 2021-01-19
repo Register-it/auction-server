@@ -97,6 +97,16 @@ public class AuctionServiceImpl implements AuctionService {
     return placeBid(userId, itemId, amount);
   }
 
+  @Override
+  public Page<Item> getBiddedItems(int userId, Pageable pageable) {
+    return Page.of(itemRepository.findBiddedByUser(userId, pageable));
+  }
+
+  @Override
+  public Page<Item> getAwardedItems(int userId, Pageable pageable) {
+    return Page.of(itemRepository.findAwardedByUser(userId, pageable));
+  }
+
   private synchronized Bid placeBid(int userId, int itemId, BigDecimal amount) {
     bidRepository.findFirstByItemIdAndAmountGreaterThanEqual(itemId, amount)
         .ifPresent(bid -> {

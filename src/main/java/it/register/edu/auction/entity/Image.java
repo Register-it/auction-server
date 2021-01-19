@@ -19,11 +19,13 @@ public class Image {
   private int id;
 
   @Enumerated(EnumType.STRING)
+  @Column(name = "FORMAT", nullable = false)
   private Format format;
 
+  @Column(name = "URL", nullable = false)
   private URL url;
 
-  @Column(name = "ITEM_ID")
+  @Column(name = "ITEM_ID", nullable = false)
   private int itemId;
 
   public enum Format {

@@ -17,17 +17,19 @@ public class Item {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
+  @Column(name = "TITLE", nullable = false)
   private String title;
 
+  @Column(name = "DESCRIPTION", nullable = false)
   private String description;
 
-  @Column(name = "AUCTION_EXPIRATION")
+  @Column(name = "AUCTION_EXPIRATION", nullable = false)
   private LocalDateTime auctionExpiration;
 
-  @Column(name = "CURRENT_PRICE")
+  @Column(name = "CURRENT_PRICE", nullable = false)
   private BigDecimal currentPrice;
 
-  @Column(name = "INITIAL_PRICE")
+  @Column(name = "INITIAL_PRICE", nullable = false)
   private BigDecimal initialPrice;
 
 }

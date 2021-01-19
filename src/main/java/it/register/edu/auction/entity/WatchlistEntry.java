@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 public class WatchlistEntry {
 
   @Id
-  @Column(name = "USER_ID")
+  @Column(name = "USER_ID", nullable = false)
   private int userId;
 
   @Id
-  @Column(name = "ITEM_ID")
+  @Column(name = "ITEM_ID", nullable = false)
   private int itemId;
 
 }

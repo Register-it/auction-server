@@ -8,7 +8,7 @@ spring:
   cache:
     cache-names: sessionToken
     caffeine:
-      spec: expireAfterWrite=60s
+      spec: expireAfterWrite=120s
 graphql:
   playground:
     settings:
@@ -29,5 +29,6 @@ auctions:
   pagination:
     max-items: 150
     max-images: 50
+    max-profile-items: 50
   session:
-    durationInMinutes: 10
+    durationInMinutes: 60

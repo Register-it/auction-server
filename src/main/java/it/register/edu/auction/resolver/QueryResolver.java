@@ -10,6 +10,7 @@ import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Item;
 import it.register.edu.auction.entity.User;
 import it.register.edu.auction.service.AuctionService;
+import it.register.edu.auction.service.WatchlistService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @Autowired
   private AuctionService auctionService;
+
+  @Autowired
+  private WatchlistService watchlistService;
 
   @Value("${auctions.pagination.max-items}")
   private int maxPageSize;
@@ -42,4 +46,5 @@ public class QueryResolver implements GraphQLQueryResolver {
   public User me() {
     return getLoggedUser();
   }
+
 }

@@ -19,10 +19,10 @@ public class Token {
   @Id
   private String id;
 
-  @Column(name = "USER_ID")
+  @Column(name = "USER_ID", nullable = false)
   private int userId;
 
-  @Column(name = "EXPIRES_AT")
+  @Column(name = "EXPIRES_AT", nullable = false)
   private LocalDateTime expiresAt;
 
 }

@@ -65,6 +65,12 @@ type User {
     lastName: String!
     "User profile image"
     image: URL!
+    "Items watched by the user"
+    watched("If given, limits the number of results" limit: Int): [Item!]!
+    "Items for which the user made a bid"
+    bidded("If given, limits the number of results" limit: Int): [Item!]!
+    "Items awarded by the user"
+    awarded("If given, limits the number of results" limit: Int): [Item!]!
 }
 
 type Query {
@@ -88,7 +94,7 @@ type Query {
         itemId: ID!
     ) : [Bid!]!
 
-    "Return the current logged in user"
+    "Returns the current logged in user"
     me: User!
 }
 
