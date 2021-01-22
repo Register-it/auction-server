@@ -1,10 +1,9 @@
-package it.register.edu.auction.resolver;
+package it.register.edu.auction.resolver.root;
 
 import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;
 import static it.register.edu.auction.util.AuthUtils.getLoggedUser;
 
 import graphql.kickstart.tools.GraphQLSubscriptionResolver;
-import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.domain.Notification;
 import it.register.edu.auction.entity.User;
 import it.register.edu.auction.service.WatchlistService;
@@ -24,7 +23,7 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   private WatchlistService watchlistService;
 
   @Secured(ROLE_AUTHENTICATED)
-  public Publisher<Notification> auctionEvent(DataFetchingEnvironment env) {
+  public Publisher<Notification> auctionEvent() {
     User user = getLoggedUser();
     return notifications.filter(n -> watchlistService.isInWatchlist(user.getId(), n.getBid().getItemId()));
   }

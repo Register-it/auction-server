@@ -1,4 +1,4 @@
-package it.register.edu.auction.resolver;
+package it.register.edu.auction.resolver.field;
 
 import static it.register.edu.auction.util.GraphQLUtils.userDataLoader;
 

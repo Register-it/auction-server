@@ -1,4 +1,4 @@
-package it.register.edu.auction.resolver;
+package it.register.edu.auction.resolver.root;
 
 import static it.register.edu.auction.service.UserSessionService.COOKIE_NAME;
 import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;

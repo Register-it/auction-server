@@ -1,4 +1,4 @@
-package it.register.edu.auction.resolver;
+package it.register.edu.auction.resolver.field;
 
 import graphql.kickstart.tools.GraphQLResolver;
 import it.register.edu.auction.domain.Notification;
