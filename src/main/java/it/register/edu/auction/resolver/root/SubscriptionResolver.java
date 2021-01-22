@@ -4,7 +4,7 @@ import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICA
 import static it.register.edu.auction.util.AuthUtils.getLoggedUser;
 
 import graphql.kickstart.tools.GraphQLSubscriptionResolver;
-import it.register.edu.auction.domain.Notification;
+import it.register.edu.auction.domain.AuctionNotification;
 import it.register.edu.auction.entity.User;
 import it.register.edu.auction.service.WatchlistService;
 import org.reactivestreams.Publisher;
@@ -17,15 +17,17 @@ import reactor.core.publisher.Flux;
 public class SubscriptionResolver implements GraphQLSubscriptionResolver {
 
   @Autowired
-  private Flux<Notification> notifications;
+  private Flux<AuctionNotification> notifications;
 
   @Autowired
   private WatchlistService watchlistService;
 
   @Secured(ROLE_AUTHENTICATED)
-  public Publisher<Notification> auctionEvent() {
+  public Publisher<AuctionNotification> auctionEvent() {
     User user = getLoggedUser();
-    return notifications.filter(n -> watchlistService.isInWatchlist(user.getId(), n.getBid().getItemId()));
+
+    // TODO: filter out bids made by the user himself
+    return notifications.filter(n -> n.getItemId().isPresent() && watchlistService.isInWatchlist(user.getId(), n.getItemId().get()));
   }
 
 }
