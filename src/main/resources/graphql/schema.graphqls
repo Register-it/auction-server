@@ -5,6 +5,18 @@ scalar Currency
 "A string representing a valid URL"
 scalar URL
 
+"Type of notifications"
+enum NotificationType {
+    "A bid has been placed on an item"
+    NEW_BID
+    "A bid has been placed that exceeds a bid placed by the user"
+    BID_EXCEEDED
+    "An auction has expired"
+    AUCTION_EXPIRED
+    "The user has won an item at auction"
+    ITEM_AWARDED
+}
+
 "An item that can be put up for auction"
 type Item {
     "The unique id of the item"
@@ -73,6 +85,16 @@ type User {
     awarded("If given, limits the number of results" limit: Int): [Item!]!
 }
 
+"A notification about an auction"
+type Notification {
+    "The last bid placed at the auction"
+    bid: Bid!
+    "The item put up for auction"
+    item: Item!
+    "The notification type"
+    type: NotificationType!
+}
+
 type Query {
     "Returns a paged list of auction items"
     items(
@@ -129,4 +151,9 @@ type Mutation {
         "Amount of the bid"
         amount: Currency!
     ): Bid
+}
+
+type Subscription {
+    "Sends a notification every time an event occurs on one of the auctions the current logged in user is interested in"
+    auctionEvent: Notification!
 }

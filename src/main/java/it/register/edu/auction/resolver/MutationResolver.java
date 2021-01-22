@@ -14,6 +14,8 @@ import graphql.execution.ExecutionPath;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.language.SourceLocation;
 import graphql.schema.DataFetchingEnvironment;
+import it.register.edu.auction.domain.Notification;
+import it.register.edu.auction.domain.Notification.Type;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Token;
 import it.register.edu.auction.entity.WatchlistId;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Sinks.Many;
 
 @Component
 public class MutationResolver implements GraphQLMutationResolver {
@@ -42,6 +45,9 @@ public class MutationResolver implements GraphQLMutationResolver {
 
   @Autowired
   private WatchlistService watchlistService;
+
+  @Autowired
+  private Many<Notification> sink;
 
   public void login(String username, String password) {
     Token token = userSessionService.issueSessionToken(username, password);
@@ -67,7 +73,12 @@ public class MutationResolver implements GraphQLMutationResolver {
   @Secured(ROLE_AUTHENTICATED)
   public DataFetcherResult<Bid> bid(int itemId, BigDecimal amount, DataFetchingEnvironment env) {
     try {
-      return result(auctionService.bid(getLoggedUser().getId(), itemId, amount));
+      Bid bid = auctionService.bid(getLoggedUser().getId(), itemId, amount);
+      Notification notification = new Notification();
+      notification.setBid(bid);
+      notification.setType(Type.NEW_BID);
+      sink.tryEmitNext(notification);
+      return result(bid);
     } catch (HigherBidExistsException e) {
       return result(e.getBid(), e, env);
     }

@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .addFilter(new TokenAuthorizationFilter(authenticationManager(), userSessionService))
         .authorizeRequests()
-        .antMatchers("/", "/graphql", "/playground", "/vendor/playground/**/*").permitAll()
+        .antMatchers("/", "/graphql", "/subscriptions", "/playground", "/vendor/playground/**/*").permitAll()
         .anyRequest().authenticated()
         .and()
         .csrf().disable();

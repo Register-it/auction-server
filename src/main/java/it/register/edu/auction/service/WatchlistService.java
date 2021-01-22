@@ -16,4 +16,7 @@ public interface WatchlistService {
   Page<Item> getWatchedItems(int userId, Pageable pageable);
 
   List<Boolean> areInWatchlist(int userId, Collection<Integer> itemIds);
+
+  boolean isInWatchlist(int userId, int itemId);
+
 }
