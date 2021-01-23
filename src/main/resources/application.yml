@@ -19,8 +19,9 @@ graphql:
     corsEnabled: true
     cors:
       allowed-origins:
-        - '*'
-#      allow-credentials: true
+        - 'http://localhost:3000'
+        - 'https://auctions-demo.netlify.app'
+      allow-credentials: true
       allowed-methods:
         - '*'
       allowed-headers:
