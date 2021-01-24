@@ -28,8 +28,8 @@ public class UserResolver implements GraphQLResolver<User> {
     return watchlistService.getWatchedItems(user.getId(), pageable(limit)).getElements();
   }
 
-  public List<Item> getBidded(User user, Integer limit) {
-    return auctionService.getBiddedItems(user.getId(), pageable(limit)).getElements();
+  public List<Item> getBid(User user, Integer limit) {
+    return auctionService.getBidItems(user.getId(), pageable(limit)).getElements();
   }
 
   public List<Item> getAwarded(User user, Integer limit) {

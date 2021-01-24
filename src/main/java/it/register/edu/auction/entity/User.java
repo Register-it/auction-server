@@ -1,5 +1,7 @@
 package it.register.edu.auction.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import java.net.URL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +23,7 @@ public class User {
   @Column(name = "USERNAME", nullable = false)
   private String username;
 
+  @JsonProperty(access = Access.WRITE_ONLY)
   @Column(name = "PASSWORD", nullable = false)
   private String password;
 

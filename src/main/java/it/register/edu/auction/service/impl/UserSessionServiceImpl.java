@@ -61,6 +61,12 @@ public class UserSessionServiceImpl implements UserSessionService {
     tokenRepository.deleteByExpiresAtBefore(LocalDateTime.now());
   }
 
+  @Override
+  public User createUser(User user) {
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return userRepository.save(user);
+  }
+
   private void validatePassword(String password, String hash) {
     if (!passwordEncoder.matches(password, hash)) {
       throw new InvalidCredentialsException();

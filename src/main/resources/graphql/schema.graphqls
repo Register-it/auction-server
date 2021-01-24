@@ -80,7 +80,7 @@ type User {
     "Items watched by the user"
     watched("If given, limits the number of results" limit: Int): [Item!]!
     "Items for which the user made a bid"
-    bidded("If given, limits the number of results" limit: Int): [Item!]!
+    bid("If given, limits the number of results" limit: Int): [Item!]!
     "Items awarded by the user"
     awarded("If given, limits the number of results" limit: Int): [Item!]!
 }

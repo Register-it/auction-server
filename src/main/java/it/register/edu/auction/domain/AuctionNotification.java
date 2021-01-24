@@ -3,9 +3,15 @@ package it.register.edu.auction.domain;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Item;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AuctionNotification {
 
   private Bid bid;

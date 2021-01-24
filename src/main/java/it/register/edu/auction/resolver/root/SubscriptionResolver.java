@@ -5,7 +5,10 @@ import static it.register.edu.auction.util.AuthUtils.getLoggedUser;
 
 import graphql.kickstart.tools.GraphQLSubscriptionResolver;
 import it.register.edu.auction.domain.AuctionNotification;
+import it.register.edu.auction.domain.AuctionNotification.Type;
+import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.User;
+import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +20,33 @@ import reactor.core.publisher.Flux;
 public class SubscriptionResolver implements GraphQLSubscriptionResolver {
 
   @Autowired
-  private Flux<AuctionNotification> notifications;
+  private Flux<Bid> bids;
 
   @Autowired
   private WatchlistService watchlistService;
 
+  @Autowired
+  private AuctionService auctionService;
+
   @Secured(ROLE_AUTHENTICATED)
   public Publisher<AuctionNotification> auctionEvent() {
     User user = getLoggedUser();
-
-    // TODO: filter out bids made by the user himself
-    return notifications.filter(n -> n.getItemId().isPresent() && watchlistService.isInWatchlist(user.getId(), n.getItemId().get()));
+    return bids.flatMap(bid -> toAuctionNotification(bid, user.getId()));
   }
 
+  private Flux<AuctionNotification> toAuctionNotification(Bid bid, int userId) {
+    if (bid.getUserId() == userId) {
+      return Flux.empty();
+    }
+
+    if (auctionService.hasBeenBid(userId, bid.getItemId())) {
+      return Flux.just(AuctionNotification.builder().bid(bid).type(Type.BID_EXCEEDED).build());
+    }
+
+    if (watchlistService.isInWatchlist(userId, bid.getItemId())) {
+      return Flux.just(AuctionNotification.builder().bid(bid).type(Type.NEW_BID).build());
+    }
+
+    return Flux.empty();
+  }
 }

@@ -16,4 +16,6 @@ public interface UserSessionService {
 
   void deleteExpiredSessionTokens();
 
+  User createUser(User user);
+
 }

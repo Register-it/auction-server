@@ -31,8 +31,10 @@ public interface AuctionService {
 
   Bid bid(int userId, int itemId, BigDecimal amount);
 
-  Page<Item> getBiddedItems(int userId, Pageable pageable);
+  Page<Item> getBidItems(int userId, Pageable pageable);
 
   Page<Item> getAwardedItems(int userId, Pageable pageable);
+
+  boolean hasBeenBid(int userId, int itemId);
 
 }
