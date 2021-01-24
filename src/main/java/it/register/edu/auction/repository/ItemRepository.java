@@ -2,6 +2,7 @@ package it.register.edu.auction.repository;
 
 import it.register.edu.auction.entity.Item;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
   @Query("SELECT i FROM Item i WHERE i.id IN (SELECT a.itemId FROM AwardedItem a WHERE a.userId = :userId)")
   Page<Item> findAwardedByUser(@Param("userId") int userId, Pageable pageable);
 
+  @Query("SELECT i FROM Item i LEFT JOIN AwardedItem a ON i.id = a.itemId WHERE i.auctionExpiration < CURRENT_TIMESTAMP AND a.id IS NULL")
+  List<Item> findExpiredNotAwarded();
 }

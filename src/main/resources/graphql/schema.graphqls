@@ -87,8 +87,8 @@ type User {
 
 "A notification about an auction"
 type Notification {
-    "The last bid placed at the auction"
-    bid: Bid!
+    "The last bid placed at the auction, if any"
+    bid: Bid
     "The item put up for auction"
     item: Item!
     "The notification type"

@@ -33,3 +33,7 @@ auctions:
     max-profile-items: 50
   session:
     durationInMinutes: 60
+scheduler:
+  fixed-rate:
+    delete-expired-tokens: 1800000  # 30 minutes
+    conclude-expired-auctions: 300000  # 5 minutes

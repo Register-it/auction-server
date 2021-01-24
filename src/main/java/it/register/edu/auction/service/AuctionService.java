@@ -37,4 +37,6 @@ public interface AuctionService {
 
   boolean hasBeenBid(int userId, int itemId);
 
+  void concludeExpiredAuctions();
+
 }

@@ -23,6 +23,9 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   private Flux<Bid> bids;
 
   @Autowired
+  private Flux<AuctionNotification> notifications;
+
+  @Autowired
   private WatchlistService watchlistService;
 
   @Autowired
@@ -31,14 +34,22 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   @Secured(ROLE_AUTHENTICATED)
   public Publisher<AuctionNotification> auctionEvent() {
     User user = getLoggedUser();
-    return bids.flatMap(bid -> toAuctionNotification(bid, user.getId()));
+    return Flux.merge(getBidNotifications(user.getId()), getCompletedAuctionNotifications(user.getId()));
+  }
+
+  private Flux<AuctionNotification> getBidNotifications(int userId) {
+    return bids
+        .filter(bid -> bid.getUserId() != userId)
+        .flatMap(bid -> toAuctionNotification(bid, userId));
+  }
+
+  private Flux<AuctionNotification> getCompletedAuctionNotifications(int userId) {
+    return notifications
+        .map(notification -> currentUserAwareNotification(notification, userId))
+        .filter(notification -> mustBeSentToTheUser(notification, userId));
   }
 
   private Flux<AuctionNotification> toAuctionNotification(Bid bid, int userId) {
-    if (bid.getUserId() == userId) {
-      return Flux.empty();
-    }
-
     if (auctionService.hasBeenBid(userId, bid.getItemId())) {
       return Flux.just(AuctionNotification.builder().bid(bid).type(Type.BID_EXCEEDED).build());
     }
@@ -49,4 +60,19 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
 
     return Flux.empty();
   }
+
+  private AuctionNotification currentUserAwareNotification(AuctionNotification notification, int userId) {
+    Bid bid = notification.getBid();
+    if (bid != null && bid.getUserId() == userId) {
+      return AuctionNotification.builder().item(notification.getItem()).bid(notification.getBid()).type(Type.ITEM_AWARDED).build();
+    }
+    return notification;
+  }
+
+  private boolean mustBeSentToTheUser(AuctionNotification notification, int userId) {
+    return notification.getItemId()
+        .map(itemId -> auctionService.hasBeenBid(userId, itemId) || watchlistService.isInWatchlist(userId, itemId))
+        .orElse(false);
+  }
+
 }

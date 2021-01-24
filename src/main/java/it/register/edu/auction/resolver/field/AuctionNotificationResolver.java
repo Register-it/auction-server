@@ -22,6 +22,8 @@ public class AuctionNotificationResolver implements GraphQLResolver<AuctionNotif
       return notification.getItem();
     }
 
-    return auctionService.getItem(notification.getBid().getItemId()).orElse(null);
+    return notification.getItemId()
+        .flatMap(itemId -> auctionService.getItem(itemId))
+        .orElse(null);
   }
 }
