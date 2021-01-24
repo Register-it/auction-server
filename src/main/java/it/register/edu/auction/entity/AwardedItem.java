@@ -1,6 +1,5 @@
 package it.register.edu.auction.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +24,8 @@ public class AwardedItem {
   @Column(name = "USER_ID", nullable = false)
   private int userId;
 
-  @Column(name = "PRICE", nullable = false)
-  private BigDecimal price;
+  @Column(name = "BID_ID", nullable = false)
+  private int bidId;
 
   @Column(name = "DATE_TIME", nullable = false)
   private LocalDateTime dateTime;
