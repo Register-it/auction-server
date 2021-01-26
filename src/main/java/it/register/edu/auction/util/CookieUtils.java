@@ -10,7 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CookieUtils {
 
+  private static boolean secure = true;
+
   private CookieUtils() {
+  }
+
+  public static void setSecure(boolean secure) {
+    CookieUtils.secure = secure;
   }
 
   public static void setCookie(HttpServletResponse response, String name, String value, LocalDateTime expiresAt) {
@@ -22,7 +28,6 @@ public class CookieUtils {
   }
 
   public static Optional<String> getToken(HttpServletRequest request, String name) {
-
     if (request.getCookies() == null) {
       return Optional.empty();
     }
@@ -37,7 +42,7 @@ public class CookieUtils {
     Cookie cookie = new Cookie(name, value);
     cookie.setHttpOnly(true);
     cookie.setMaxAge(maxAge);
-    cookie.setSecure(true);
+    cookie.setSecure(secure);
     response.addCookie(cookie);
   }
 

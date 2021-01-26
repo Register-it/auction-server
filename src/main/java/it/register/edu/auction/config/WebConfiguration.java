@@ -5,6 +5,7 @@ import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,6 +18,7 @@ public class WebConfiguration implements WebMvcConfigurer {
   }
 
   @Bean
+  @Profile("!dev")
   public TomcatContextCustomizer sameSiteCookiesConfig() {
     return context -> {
       final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
@@ -24,4 +26,5 @@ public class WebConfiguration implements WebMvcConfigurer {
       context.setCookieProcessor(cookieProcessor);
     };
   }
+
 }
