@@ -1,15 +1,22 @@
 package it.register.edu.auction.util;
 
+import static org.springframework.http.HttpHeaders.COOKIE;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.HandshakeRequest;
 
 public class CookieUtils {
 
+  private static final String COOKIE_SEPARATOR = ";";
+  private static final String NAME_VALUE_SEPARATOR = "=";
   private static boolean secure = true;
 
   private CookieUtils() {
@@ -32,7 +39,21 @@ public class CookieUtils {
       return Optional.empty();
     }
 
-    return Arrays.stream(request.getCookies())
+    return getCookieValue(Arrays.asList(request.getCookies()), name);
+  }
+
+  public static Optional<String> getToken(HandshakeRequest request, String name) {
+    List<Cookie> cookies = request.getHeaders().get(COOKIE).stream()
+        .flatMap(cookie -> Arrays.stream(cookie.split(COOKIE_SEPARATOR)))
+        .map(cookie -> cookie.split(NAME_VALUE_SEPARATOR))
+        .map(cookieParts -> new Cookie(cookieParts[0].trim(), cookieParts[1].trim()))
+        .collect(Collectors.toList());
+
+    return getCookieValue(cookies, name);
+  }
+
+  private static Optional<String> getCookieValue(List<Cookie> cookies, String name) {
+    return cookies.stream()
         .filter(cookie -> cookie.getName().equals(name))
         .map(Cookie::getValue)
         .findAny();
