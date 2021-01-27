@@ -47,4 +47,19 @@ public class QueryResolver implements GraphQLQueryResolver {
     return getLoggedUser();
   }
 
+  @Secured(ROLE_AUTHENTICATED)
+  public Page<Item> getWatchedItems(int page, int size) {
+    return watchlistService.getWatchedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+  }
+
+  @Secured(ROLE_AUTHENTICATED)
+  public Page<Item> getBidItems(int page, int size) {
+    return auctionService.getBidItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+  }
+
+  @Secured(ROLE_AUTHENTICATED)
+  public Page<Item> getAwardedItems(int page, int size) {
+    return auctionService.getAwardedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+  }
+
 }

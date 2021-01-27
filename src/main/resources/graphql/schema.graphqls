@@ -118,6 +118,30 @@ type Query {
 
     "Returns the current logged in user"
     me: User!
+
+    "Paginated list of items watched by the current logged in user"
+    watchedItems(
+        "Required page (defaults to 0, i.e. first page)"
+        page: Int = 0,
+        "Page size (i.e. number of elements in each page), defaults to 10"
+        size: Int = 10
+    ): Page!
+
+    "Paginated list of items the current logged in user made a bid on"
+    bidItems(
+        "Required page (defaults to 0, i.e. first page)"
+        page: Int = 0,
+        "Page size (i.e. number of elements in each page), defaults to 10"
+        size: Int = 10
+    ): Page!
+
+    "Paginated list of items awarded by the current logged in user"
+    awardedItems(
+        "Required page (defaults to 0, i.e. first page)"
+        page: Int = 0,
+        "Page size (i.e. number of elements in each page), defaults to 10"
+        size: Int = 10
+    ): Page!
 }
 
 type Mutation {
