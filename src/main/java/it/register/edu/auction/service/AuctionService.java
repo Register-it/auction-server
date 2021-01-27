@@ -33,9 +33,9 @@ public interface AuctionService {
 
   Page<Item> getBidItems(int userId, Pageable pageable);
 
-  Page<Item> getAwardedItems(int userId, Pageable pageable);
+  List<Item> getBidItems(int userId);
 
-  boolean hasBeenBid(int userId, int itemId);
+  Page<Item> getAwardedItems(int userId, Pageable pageable);
 
   void concludeExpiredAuctions();
 

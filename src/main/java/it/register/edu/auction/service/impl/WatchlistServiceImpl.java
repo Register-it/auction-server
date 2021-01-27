@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,14 @@ public class WatchlistServiceImpl implements WatchlistService {
   private ItemRepository itemRepository;
 
   @Override
+  @CacheEvict(value = "watchedItems", key = "#userId")
   public void addToWatchlist(int userId, int itemId) {
     watchlistRepository.save(WatchlistEntry.builder().userId(userId).itemId(itemId).build());
   }
 
   @Override
   @Transactional
+  @CacheEvict(value = "watchedItems", key = "#id.userId")
   public void removeFromWatchlist(WatchlistId id) {
     watchlistRepository.deleteById(id);
   }
@@ -38,6 +42,12 @@ public class WatchlistServiceImpl implements WatchlistService {
   @Override
   public Page<Item> getWatchedItems(int userId, Pageable pageable) {
     return Page.of(itemRepository.findWatchedByUser(userId, pageable));
+  }
+
+  @Override
+  @Cacheable("watchedItems")
+  public List<Item> getWatchedItems(int userId) {
+    return itemRepository.findWatchedByUser(userId);
   }
 
   @Override
@@ -50,11 +60,6 @@ public class WatchlistServiceImpl implements WatchlistService {
     return itemIds.stream()
         .map(watched::contains)
         .collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean isInWatchlist(int userId, int itemId) {
-    return watchlistRepository.existsByUserIdAndItemId(userId, itemId);
   }
 
 }

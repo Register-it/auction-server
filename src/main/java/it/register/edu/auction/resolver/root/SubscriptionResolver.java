@@ -7,6 +7,7 @@ import graphql.kickstart.tools.GraphQLSubscriptionResolver;
 import it.register.edu.auction.domain.AuctionNotification;
 import it.register.edu.auction.domain.AuctionNotification.Type;
 import it.register.edu.auction.entity.Bid;
+import it.register.edu.auction.entity.Item;
 import it.register.edu.auction.entity.User;
 import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
@@ -50,11 +51,11 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   }
 
   private Flux<AuctionNotification> toAuctionNotification(Bid bid, int userId) {
-    if (auctionService.hasBeenBid(userId, bid.getItemId())) {
+    if (hasBeenBid(userId, bid.getItemId())) {
       return Flux.just(AuctionNotification.builder().bid(bid).type(Type.BID_EXCEEDED).build());
     }
 
-    if (watchlistService.isInWatchlist(userId, bid.getItemId())) {
+    if (isInWatchlist(userId, bid.getItemId())) {
       return Flux.just(AuctionNotification.builder().bid(bid).type(Type.NEW_BID).build());
     }
 
@@ -71,8 +72,15 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
 
   private boolean mustBeSentToTheUser(AuctionNotification notification, int userId) {
     return notification.getItemId()
-        .map(itemId -> auctionService.hasBeenBid(userId, itemId) || watchlistService.isInWatchlist(userId, itemId))
+        .map(itemId -> hasBeenBid(userId, itemId) || isInWatchlist(userId, itemId))
         .orElse(false);
   }
 
+  private boolean hasBeenBid(int userId, int itemId) {
+    return auctionService.getBidItems(userId).stream().map(Item::getId).anyMatch(id -> id == itemId);
+  }
+
+  private boolean isInWatchlist(int userId, int itemId) {
+    return watchlistService.getWatchedItems(userId).stream().map(Item::getId).anyMatch(id -> id == itemId);
+  }
 }

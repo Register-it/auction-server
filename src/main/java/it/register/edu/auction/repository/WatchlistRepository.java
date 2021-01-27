@@ -12,6 +12,4 @@ public interface WatchlistRepository extends JpaRepository<WatchlistEntry, Watch
 
   List<WatchlistEntry> findByUserIdAndItemIdIn(int userId, Collection<Integer> itemIds);
 
-  boolean existsByUserIdAndItemId(int userId, int itemId);
-
 }

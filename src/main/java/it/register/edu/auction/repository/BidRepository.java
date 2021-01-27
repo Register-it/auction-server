@@ -21,8 +21,6 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
 
   Optional<Bid> findFirstByItemIdAndAmountGreaterThanEqual(int itemId, BigDecimal amount);
 
-  boolean existsByItemIdAndUserId(int itemId, int userId);
-
   Optional<Bid> findFirstByItemIdOrderByAmountDesc(int itemId);
 
 }

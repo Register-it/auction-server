@@ -19,8 +19,14 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
   @Query("SELECT i FROM Item i WHERE i.id IN (SELECT w.itemId FROM WatchlistEntry w WHERE w.userId = :userId)")
   Page<Item> findWatchedByUser(@Param("userId") int userId, Pageable pageable);
 
+  @Query("SELECT i FROM Item i WHERE i.id IN (SELECT w.itemId FROM WatchlistEntry w WHERE w.userId = :userId)")
+  List<Item> findWatchedByUser(@Param("userId") int userId);
+
   @Query("SELECT i FROM Item i WHERE i.id IN (SELECT DISTINCT b.itemId FROM Bid b WHERE b.userId = :userId)")
   Page<Item> findBidByUser(@Param("userId") int userId, Pageable pageable);
+
+  @Query("SELECT i FROM Item i WHERE i.id IN (SELECT DISTINCT b.itemId FROM Bid b WHERE b.userId = :userId)")
+  List<Item> findBidByUser(@Param("userId") int userId);
 
   @Query("SELECT i FROM Item i WHERE i.id IN (SELECT a.itemId FROM AwardedItem a WHERE a.userId = :userId)")
   Page<Item> findAwardedByUser(@Param("userId") int userId, Pageable pageable);

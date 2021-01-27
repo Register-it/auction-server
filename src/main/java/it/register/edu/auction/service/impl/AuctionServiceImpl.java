@@ -28,6 +28,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Sinks.Many;
@@ -59,6 +62,7 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
+  @Cacheable("items")
   public Optional<Item> getItem(int id) {
     return itemRepository.findById(id);
   }
@@ -96,6 +100,10 @@ public class AuctionServiceImpl implements AuctionService {
 
   @Override
   @Transactional
+  @Caching(evict = {
+      @CacheEvict(value = "bidItems", key = "#userId"),
+      @CacheEvict(value = "items", key = "#itemId")
+  })
   public Bid bid(int userId, int itemId, BigDecimal amount) {
 
     Item item = itemRepository.findByIdAndAuctionExpirationAfter(itemId, LocalDateTime.now())
@@ -114,13 +122,14 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public Page<Item> getAwardedItems(int userId, Pageable pageable) {
-    return Page.of(itemRepository.findAwardedByUser(userId, pageable));
+  @Cacheable("bidItems")
+  public List<Item> getBidItems(int userId) {
+    return itemRepository.findBidByUser(userId);
   }
 
   @Override
-  public boolean hasBeenBid(int userId, int itemId) {
-    return bidRepository.existsByItemIdAndUserId(itemId, userId);
+  public Page<Item> getAwardedItems(int userId, Pageable pageable) {
+    return Page.of(itemRepository.findAwardedByUser(userId, pageable));
   }
 
   @Override
