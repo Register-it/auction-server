@@ -15,11 +15,14 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
+
+  public static final Sort ITEM_DEFAULT_SORT = Sort.by("title");
 
   @Autowired
   private AuctionService auctionService;
@@ -31,7 +34,7 @@ public class QueryResolver implements GraphQLQueryResolver {
   private int maxPageSize;
 
   public Page<Item> getItems(int page, int size) {
-    return auctionService.getItems(LimitedPageRequest.of(page, size, maxPageSize));
+    return auctionService.getItems(LimitedPageRequest.of(page, size, maxPageSize, ITEM_DEFAULT_SORT));
   }
 
   public Optional<Item> getItem(int id) {
@@ -49,17 +52,17 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @Secured(ROLE_AUTHENTICATED)
   public Page<Item> getWatchedItems(int page, int size) {
-    return watchlistService.getWatchedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+    return watchlistService.getWatchedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize, ITEM_DEFAULT_SORT));
   }
 
   @Secured(ROLE_AUTHENTICATED)
   public Page<Item> getBidItems(int page, int size) {
-    return auctionService.getBidItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+    return auctionService.getBidItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize, ITEM_DEFAULT_SORT));
   }
 
   @Secured(ROLE_AUTHENTICATED)
   public Page<Item> getAwardedItems(int page, int size) {
-    return auctionService.getAwardedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize));
+    return auctionService.getAwardedItems(getLoggedUser().getId(), LimitedPageRequest.of(page, size, maxPageSize, ITEM_DEFAULT_SORT));
   }
 
 }

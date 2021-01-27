@@ -69,7 +69,7 @@ public class AuctionServiceImpl implements AuctionService {
 
   @Override
   public List<Bid> getBids(int itemId) {
-    return bidRepository.findByItemId(itemId);
+    return bidRepository.findByItemIdOrderByDateTimeDesc(itemId);
   }
 
   @Override

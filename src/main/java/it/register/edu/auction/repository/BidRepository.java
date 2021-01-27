@@ -17,7 +17,7 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
   @Query(value = "SELECT COUNT(1) AS total, ITEM_ID AS itemId FROM BID WHERE ITEM_ID IN (:itemIds) GROUP BY ITEM_ID", nativeQuery = true)
   List<BidsNumber> countByItemIdInGroupByItemId(@Param("itemIds") Collection<Integer> itemIds);
 
-  List<Bid> findByItemId(int itemId);
+  List<Bid> findByItemIdOrderByDateTimeDesc(int itemId);
 
   Optional<Bid> findFirstByItemIdAndAmountGreaterThanEqual(int itemId, BigDecimal amount);
 
