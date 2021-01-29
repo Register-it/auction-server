@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
 
-  public static final Sort ITEM_DEFAULT_SORT = Sort.by("title");
+  public static final Sort ITEM_DEFAULT_SORT = Sort.by("auctionExpiration").and(Sort.by("title"));
 
   @Autowired
   private AuctionService auctionService;
