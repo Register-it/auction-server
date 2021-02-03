@@ -24,4 +24,4 @@ jobs:
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v1
         with:
-          files: ./target/jacoco.exec
+          files: ./target/jacoco/jacoco.xml
