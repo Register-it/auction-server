@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.COOKIE;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class CookieUtils {
     setCookie(response, name, "", 0);
   }
 
-  public static Optional<String> getToken(HttpServletRequest request, String name) {
+  public static Optional<String> getCookieValue(HttpServletRequest request, String name) {
     if (request.getCookies() == null) {
       return Optional.empty();
     }
@@ -42,8 +43,9 @@ public class CookieUtils {
     return getCookieValue(Arrays.asList(request.getCookies()), name);
   }
 
-  public static Optional<String> getToken(HandshakeRequest request, String name) {
-    List<Cookie> cookies = request.getHeaders().get(COOKIE).stream()
+  public static Optional<String> getCookieValue(HandshakeRequest request, String name) {
+    List<Cookie> cookies = Optional.ofNullable(request.getHeaders().get(COOKIE)).orElse(Collections.emptyList())
+        .stream()
         .flatMap(cookie -> Arrays.stream(cookie.split(COOKIE_SEPARATOR)))
         .map(cookie -> cookie.split(NAME_VALUE_SEPARATOR))
         .map(cookieParts -> new Cookie(cookieParts[0].trim(), cookieParts[1].trim()))

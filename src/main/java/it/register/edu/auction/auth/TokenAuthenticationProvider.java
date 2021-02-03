@@ -1,7 +1,7 @@
 package it.register.edu.auction.auth;
 
 import static it.register.edu.auction.service.UserSessionService.ROLE_AUTHENTICATED;
-import static it.register.edu.auction.util.CookieUtils.getToken;
+import static it.register.edu.auction.util.CookieUtils.getCookieValue;
 
 import it.register.edu.auction.entity.User;
 import it.register.edu.auction.service.UserSessionService;
@@ -22,11 +22,11 @@ public class TokenAuthenticationProvider {
   private UserSessionService userSessionService;
 
   public void auth(HttpServletRequest req) {
-    getToken(req, UserSessionService.COOKIE_NAME).ifPresent(this::auth);
+    getCookieValue(req, UserSessionService.COOKIE_NAME).ifPresent(this::auth);
   }
 
   public void auth(HandshakeRequest req) {
-    getToken(req, UserSessionService.COOKIE_NAME).ifPresent(this::auth);
+    getCookieValue(req, UserSessionService.COOKIE_NAME).ifPresent(this::auth);
   }
 
   private void auth(String token) {

@@ -34,9 +34,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 
   @Override
   @Transactional
-  @CacheEvict(value = "watchedItems", key = "#id.userId")
-  public void removeFromWatchlist(WatchlistId id) {
-    watchlistRepository.deleteById(id);
+  @CacheEvict(value = "watchedItems", key = "#userId")
+  public void removeFromWatchlist(int userId, int itemId) {
+    watchlistRepository.deleteById(new WatchlistId(userId, itemId));
   }
 
   @Override

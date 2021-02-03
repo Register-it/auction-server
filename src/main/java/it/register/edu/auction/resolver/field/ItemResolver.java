@@ -12,26 +12,17 @@ import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.domain.LimitedPageRequest;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Item;
-import it.register.edu.auction.service.AuctionService;
-import it.register.edu.auction.service.WatchlistService;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ItemResolver implements GraphQLResolver<Item> {
-
-  @Autowired
-  private AuctionService auctionService;
-
-  @Autowired
-  private WatchlistService watchlistService;
-
+  
   @Value("${auctions.pagination.max-images}")
   private int maxImages;
 

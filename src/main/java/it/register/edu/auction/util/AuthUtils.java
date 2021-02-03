@@ -24,7 +24,9 @@ public class AuthUtils {
   }
 
   private static boolean userHasRole(String role) {
-    return getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(role));
+    return Optional.ofNullable(getAuthentication())
+        .map(auth -> auth.getAuthorities().contains(new SimpleGrantedAuthority(role)))
+        .orElse(false);
   }
 
   private static Authentication getAuthentication() {

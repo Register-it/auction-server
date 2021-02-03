@@ -24,7 +24,7 @@ public class WatchlistDataLoader implements DataLoaderBuilder<Integer, Boolean> 
           .reduce((a, b) -> {
             throw new IllegalDataLoaderUsageException("WatchlistDataLoader must have the same userId context for every load() call in a request");
           })
-          .get();
+          .orElseThrow(() -> new IllegalDataLoaderUsageException("WatchlistDataLoader must be called with a userId in the load() context"));
 
       return CompletableFuture.supplyAsync(() -> watchlistService.areInWatchlist(userId, itemIds));
     });

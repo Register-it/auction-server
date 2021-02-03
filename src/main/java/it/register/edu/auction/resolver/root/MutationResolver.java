@@ -16,7 +16,6 @@ import graphql.language.SourceLocation;
 import graphql.schema.DataFetchingEnvironment;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Token;
-import it.register.edu.auction.entity.WatchlistId;
 import it.register.edu.auction.exception.GraphQLDataFetchingException;
 import it.register.edu.auction.exception.HigherBidExistsException;
 import it.register.edu.auction.service.AuctionService;
@@ -45,7 +44,7 @@ public class MutationResolver implements GraphQLMutationResolver {
   private WatchlistService watchlistService;
 
   @Autowired
-  private Many<Bid> bids;
+  private Many<Bid> bidSink;
 
   public void login(String username, String password) {
     Token token = userSessionService.issueSessionToken(username, password);
@@ -65,14 +64,14 @@ public class MutationResolver implements GraphQLMutationResolver {
 
   @Secured(ROLE_AUTHENTICATED)
   public void unwatch(int itemId) {
-    watchlistService.removeFromWatchlist(new WatchlistId(getLoggedUser().getId(), itemId));
+    watchlistService.removeFromWatchlist(getLoggedUser().getId(), itemId);
   }
 
   @Secured(ROLE_AUTHENTICATED)
   public DataFetcherResult<Bid> bid(int itemId, BigDecimal amount, DataFetchingEnvironment env) {
     try {
       Bid bid = auctionService.bid(getLoggedUser().getId(), itemId, amount);
-      bids.tryEmitNext(bid);
+      bidSink.tryEmitNext(bid);
       return result(bid);
     } catch (HigherBidExistsException e) {
       return result(e.getBid(), e, env);
