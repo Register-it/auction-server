@@ -19,7 +19,7 @@ jobs:
           java-version: '11'
 
       - name: Build with Maven
-        run: mvn -B test
+        run: mvn -B test jacoco:report
 
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v1
