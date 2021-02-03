@@ -108,6 +108,11 @@
         <version>0.8.6</version>
         <configuration>
           <outputDirectory>target/jacoco</outputDirectory>
+          <excludes>
+            <exclude>**/Application.*</exclude>
+            <exclude>**/config/*.*</exclude>
+            <exclude>**/exception/*.*</exclude>
+          </excludes>
         </configuration>
         <executions>
           <execution>
