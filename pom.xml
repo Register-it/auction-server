@@ -111,8 +111,22 @@
           <excludes>
             <exclude>**/Application.*</exclude>
             <exclude>**/config/*.*</exclude>
+            <exclude>**/domain/*.*</exclude>
+            <exclude>**/entity/*.*</exclude>
             <exclude>**/exception/*.*</exclude>
           </excludes>
+          <rules>
+            <rule>
+              <element>BUNDLE</element>
+              <limits>
+                <limit>
+                  <counter>INSTRUCTION</counter>
+                  <value>COVEREDRATIO</value>
+                  <minimum>${coverage.min}%</minimum>
+                </limit>
+              </limits>
+            </rule>
+          </rules>
         </configuration>
         <executions>
           <execution>
@@ -121,8 +135,15 @@
             </goals>
           </execution>
           <execution>
-            <id>report</id>
-            <phase>prepare-package</phase>
+            <id>jacoco-check</id>
+            <phase>test</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-report</id>
+            <phase>test</phase>
             <goals>
               <goal>report</goal>
             </goals>
