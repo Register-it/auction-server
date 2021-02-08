@@ -2,7 +2,6 @@ package it.register.edu.auction.test.integration;
 
 import static it.register.edu.auction.exception.GraphQLDataFetchingException.ERROR_CODE_UNAUTHORIZED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -11,10 +10,7 @@ import static org.springframework.http.HttpHeaders.COOKIE;
 
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import it.register.edu.auction.domain.BidsNumber;
 import it.register.edu.auction.entity.Bid;
-import it.register.edu.auction.entity.Image;
-import it.register.edu.auction.entity.Image.Format;
 import it.register.edu.auction.entity.Item;
 import it.register.edu.auction.entity.Token;
 import it.register.edu.auction.entity.User;
@@ -34,8 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,6 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Tag("integration")
 public abstract class IntegrationTest {
 
   protected static final int ITEM_ID = 123;
@@ -68,6 +65,7 @@ public abstract class IntegrationTest {
   protected static final String USER_FIRST_NAME = "First Name";
   protected static final String USERNAME = "username";
   protected static final String USER_PROFILE_IMAGE = "https://image.url/profile";
+  protected static final String PASSWORD_HASH = "$2a$10$JnA6ORPHQiFUBrlar26aF.8To/E9towkszxhXc.p9LM4/o/kTrI8m";
 
   @Autowired
   protected GraphQLTestTemplate graphQLTestTemplate;
@@ -93,12 +91,6 @@ public abstract class IntegrationTest {
   @MockBean
   protected WatchlistRepository watchlistRepository;
 
-  @Value("${auctions.pagination.max-images}")
-  protected int maxImages;
-
-  @Value("${auctions.pagination.max-items}")
-  protected int maxPageSize;
-
   protected Item getTestItem(int itemId) {
     return Item.builder()
         .id(itemId)
@@ -112,49 +104,6 @@ public abstract class IntegrationTest {
 
   protected Item getTestItem() {
     return getTestItem(ITEM_ID);
-  }
-
-  protected BidsNumber getTestBidsNumber() {
-    return new BidsNumber() {
-      @Override
-      public Integer getItemId() {
-        return ITEM_ID;
-      }
-
-      @Override
-      public Integer getTotal() {
-        return BIDS_NUMBER;
-      }
-    };
-  }
-
-  protected List<Image> getTestThumbnailsList() {
-    return List.of(
-        getTestImage(THUMBNAIL_ID1, ITEM_ID, Format.THUMBNAIL),
-        getTestImage(THUMBNAIL_ID2, ITEM_ID, Format.THUMBNAIL),
-        getTestImage(THUMBNAIL_ID3, ITEM_ID, Format.THUMBNAIL)
-    );
-  }
-
-  protected List<Image> getTestImagesList() {
-    return List.of(
-        getTestImage(IMAGE_ID1, ITEM_ID, Format.FULLSIZE),
-        getTestImage(IMAGE_ID2, ITEM_ID, Format.FULLSIZE),
-        getTestImage(IMAGE_ID3, ITEM_ID, Format.FULLSIZE)
-    );
-  }
-
-  protected Image getTestImage(int id, int itemId, Format format) {
-    try {
-      return Image.builder()
-          .id(id)
-          .format(format)
-          .itemId(itemId)
-          .url(new URL(IMAGE_URL_PREFIX + format + "/" + itemId + "/" + id))
-          .build();
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
   }
 
   protected Bid getTestBid(int id) {
@@ -178,6 +127,7 @@ public abstract class IntegrationTest {
     return User.builder()
         .id(USER_ID)
         .username(USERNAME)
+        .password(PASSWORD_HASH)
         .firstName(USER_FIRST_NAME)
         .lastName(USER_LAST_NAME)
         .image(new URL(USER_PROFILE_IMAGE))
@@ -185,11 +135,14 @@ public abstract class IntegrationTest {
   }
 
   protected void assertUnauthorized(GraphQLResponse response) {
+    assertGraphQLError(response, ERROR_CODE_UNAUTHORIZED);
+  }
+
+  protected void assertGraphQLError(GraphQLResponse response, String error) {
     assertTrue(response.isOk());
-    assertNull(response.get("$.data"));
     CustomGraphQLError[] errors = response.get("$.errors", CustomGraphQLError[].class);
     assertEquals(1, errors.length);
-    assertEquals(ERROR_CODE_UNAUTHORIZED, errors[0].getErrorCode());
+    assertEquals(error, errors[0].getErrorCode());
   }
 
   protected List<Item> getTestItemList(int size) {

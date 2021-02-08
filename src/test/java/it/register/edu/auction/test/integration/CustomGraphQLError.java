@@ -1,5 +1,6 @@
 package it.register.edu.auction.test.integration;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import graphql.ErrorClassification;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
@@ -12,6 +13,7 @@ import lombok.Data;
 public class CustomGraphQLError implements GraphQLError {
 
   private String message;
+  @JsonIgnore
   private List<SourceLocation> locations;
   private ErrorClassification errorType;
   private List<Object> path;

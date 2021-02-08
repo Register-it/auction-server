@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.graphql.spring.boot.test.GraphQLResponse;
+import it.register.edu.auction.domain.BidsNumber;
 import it.register.edu.auction.entity.Image;
 import it.register.edu.auction.entity.Image.Format;
 import it.register.edu.auction.entity.WatchlistEntry;
 import it.register.edu.auction.test.integration.IntegrationTest;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +21,13 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 
 @DisplayName("The 'item' query")
 class ItemQueryTest extends IntegrationTest {
+
+  @Value("${auctions.pagination.max-images}")
+  protected int maxImages;
 
   private final List<Image> images = getTestImagesList();
   private final List<Image> thumbnails = getTestThumbnailsList();
@@ -105,5 +112,48 @@ class ItemQueryTest extends IntegrationTest {
     IntStream.range(0, imageUrls.length).forEach(i -> assertEquals(images.get(i).getUrl().toString(), imageUrls[i]));
 
     assertEquals(watched, response.get("$.data.item.watched", Boolean.class));
+  }
+
+  protected BidsNumber getTestBidsNumber() {
+    return new BidsNumber() {
+      @Override
+      public Integer getItemId() {
+        return ITEM_ID;
+      }
+
+      @Override
+      public Integer getTotal() {
+        return BIDS_NUMBER;
+      }
+    };
+  }
+
+  protected List<Image> getTestThumbnailsList() {
+    return List.of(
+        getTestImage(THUMBNAIL_ID1, ITEM_ID, Format.THUMBNAIL),
+        getTestImage(THUMBNAIL_ID2, ITEM_ID, Format.THUMBNAIL),
+        getTestImage(THUMBNAIL_ID3, ITEM_ID, Format.THUMBNAIL)
+    );
+  }
+
+  protected List<Image> getTestImagesList() {
+    return List.of(
+        getTestImage(IMAGE_ID1, ITEM_ID, Format.FULLSIZE),
+        getTestImage(IMAGE_ID2, ITEM_ID, Format.FULLSIZE),
+        getTestImage(IMAGE_ID3, ITEM_ID, Format.FULLSIZE)
+    );
+  }
+
+  protected Image getTestImage(int id, int itemId, Format format) {
+    try {
+      return Image.builder()
+          .id(id)
+          .format(format)
+          .itemId(itemId)
+          .url(new URL(IMAGE_URL_PREFIX + format + "/" + itemId + "/" + id))
+          .build();
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

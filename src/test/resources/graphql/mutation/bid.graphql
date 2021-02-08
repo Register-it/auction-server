@@ -1,0 +1,5 @@
+mutation {
+    bid(itemId: "123", amount: 234.56) {
+        amount
+    }
+}

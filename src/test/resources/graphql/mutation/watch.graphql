@@ -1,0 +1,3 @@
+mutation {
+    watch(itemId: "123")
+}
