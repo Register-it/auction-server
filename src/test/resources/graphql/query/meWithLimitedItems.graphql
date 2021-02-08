@@ -1,0 +1,16 @@
+query {
+    me {
+        firstName
+        lastName
+        image
+        watched(limit: 1) {
+            id
+        }
+        bid(limit: 2) {
+            id
+        }
+        awarded(limit: 3) {
+            id
+        }
+    }
+}

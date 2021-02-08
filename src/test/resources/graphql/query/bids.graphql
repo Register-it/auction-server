@@ -1,0 +1,7 @@
+query {
+    bids(itemId: "123") {
+        id
+        amount
+        username
+    }
+}

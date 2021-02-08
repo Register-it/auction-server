@@ -1,0 +1,16 @@
+query {
+    me {
+        firstName
+        lastName
+        image
+        watched {
+            id
+        }
+        bid {
+            id
+        }
+        awarded {
+            id
+        }
+    }
+}

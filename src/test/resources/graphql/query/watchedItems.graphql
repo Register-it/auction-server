@@ -1,0 +1,12 @@
+query {
+    watchedItems {
+        totalElements
+        totalPages
+        isFirst
+        isLast
+        current
+        elements {
+            id
+        }
+    }
+}

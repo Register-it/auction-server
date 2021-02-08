@@ -1,0 +1,12 @@
+query {
+    items {
+        totalElements
+        totalPages
+        isFirst
+        isLast
+        current
+        elements {
+            id
+        }
+    }
+}

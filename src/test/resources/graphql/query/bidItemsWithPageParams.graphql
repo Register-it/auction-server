@@ -1,0 +1,12 @@
+query {
+    bidItems(page: 1, size: 4) {
+        totalElements
+        totalPages
+        isFirst
+        isLast
+        current
+        elements {
+            id
+        }
+    }
+}

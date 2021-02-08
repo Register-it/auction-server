@@ -1,0 +1,14 @@
+query {
+    item(id: "123") {
+        id
+        title
+        description
+        thumbnails(limit: 2)
+        images
+        auctionExpiration
+        currentPrice
+        initialPrice
+        bidsNumber
+        watched
+    }
+}

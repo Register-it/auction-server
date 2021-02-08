@@ -1,0 +1,12 @@
+query {
+    awardedItems {
+        totalElements
+        totalPages
+        isFirst
+        isLast
+        current
+        elements {
+            id
+        }
+    }
+}
