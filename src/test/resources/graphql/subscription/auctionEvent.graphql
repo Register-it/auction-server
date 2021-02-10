@@ -1,0 +1,11 @@
+subscription {
+    auctionEvent {
+        item {
+            id
+        }
+        bid {
+            amount
+        }
+        type
+    }
+}

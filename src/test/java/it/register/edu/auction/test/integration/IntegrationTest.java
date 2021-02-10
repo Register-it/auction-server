@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.COOKIE;
 
 import com.graphql.spring.boot.test.GraphQLResponse;
+import com.graphql.spring.boot.test.GraphQLTestSubscription;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import it.register.edu.auction.entity.Bid;
 import it.register.edu.auction.entity.Item;
@@ -69,6 +70,9 @@ public abstract class IntegrationTest {
 
   @Autowired
   protected GraphQLTestTemplate graphQLTestTemplate;
+
+  @Autowired
+  protected GraphQLTestSubscription graphQLTestSubscription;
 
   @MockBean
   protected ItemRepository itemRepository;
