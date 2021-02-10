@@ -28,7 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .addFilter(new TokenAuthorizationFilter(authenticationManager(), tokenAuthenticationProvider))
         .authorizeRequests()
-        .antMatchers("/", "/graphql", "/subscriptions", "/admin/**/*", "/playground", "/vendor/playground/**/*").permitAll()
+        .antMatchers(
+            "/",
+            "/graphql",
+            "/subscriptions",
+            "/admin/**/*",
+            "/playground",
+            "/vendor/playground/**/*",
+            "/v2/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**/*",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/rest/**/*"
+        ).permitAll()
         .anyRequest().authenticated()
         .and()
         .csrf().disable();
