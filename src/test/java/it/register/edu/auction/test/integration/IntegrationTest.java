@@ -101,9 +101,9 @@ public abstract class IntegrationTest {
         .title(ITEM_TITLE)
         .description(ITEM_DESCRIPTION)
         .initialPrice(ITEM_INITIAL_PRICE)
-        .currentPrice(ITEM_CURRENT_PRICE)
-        .auctionExpiration(AUCTION_EXPIRATION)
-        .build();
+            .currentPrice(ITEM_CURRENT_PRICE)
+            .auctionExpiration(AUCTION_EXPIRATION)
+            .build();
   }
 
   protected Item getTestItem() {
@@ -111,31 +111,43 @@ public abstract class IntegrationTest {
   }
 
   protected Bid getTestBid(int id) {
+    return getTestBid(id, USER_ID);
+  }
+
+  protected Bid getTestBid(int id, int userId) {
     return Bid.builder()
-        .id(id)
-        .userId(USER_ID)
-        .itemId(ITEM_ID)
-        .amount(new BigDecimal(100 + id))
-        .build();
+            .id(id)
+            .userId(userId)
+            .itemId(ITEM_ID)
+            .amount(new BigDecimal(100 + id))
+            .build();
   }
 
   protected GraphQLTestTemplate authenticated(GraphQLTestTemplate template) throws MalformedURLException {
+    return authenticated(template, USER_ID);
+  }
+
+  protected GraphQLTestTemplate authenticated(GraphQLTestTemplate template, int userId) throws MalformedURLException {
     Token token = Token.builder().userId(USER_ID).build();
     when(tokenRepository.findByIdAndExpiresAtAfter(eq(AUTH_TOKEN), any(LocalDateTime.class))).thenReturn(Optional.of(token));
-    User user = getTestUser();
+    User user = getTestUser(userId);
     when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
     return template.withAdditionalHeader(COOKIE, UserSessionService.COOKIE_NAME + "=" + AUTH_TOKEN);
   }
 
   protected User getTestUser() throws MalformedURLException {
+    return getTestUser(USER_ID);
+  }
+
+  protected User getTestUser(int userId) throws MalformedURLException {
     return User.builder()
-        .id(USER_ID)
-        .username(USERNAME)
-        .password(PASSWORD_HASH)
-        .firstName(USER_FIRST_NAME)
-        .lastName(USER_LAST_NAME)
-        .image(new URL(USER_PROFILE_IMAGE))
-        .build();
+            .id(userId)
+            .username(USERNAME)
+            .password(PASSWORD_HASH)
+            .firstName(USER_FIRST_NAME)
+            .lastName(USER_LAST_NAME)
+            .image(new URL(USER_PROFILE_IMAGE))
+            .build();
   }
 
   protected void assertUnauthorized(GraphQLResponse response) {
