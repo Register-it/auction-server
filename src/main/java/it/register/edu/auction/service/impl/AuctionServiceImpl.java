@@ -73,10 +73,25 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
+  public int getBidsNumber(int itemId) {
+    return bidRepository.countByItemId(itemId);
+  }
+
+  @Override
   public Map<Integer, Integer> getBidsNumber(Collection<Integer> itemIds) {
     return bidRepository.countByItemIdInGroupByItemId(itemIds)
         .stream()
         .collect(Collectors.toMap(BidsNumber::getItemId, BidsNumber::getTotal));
+  }
+
+  @Override
+  public List<Image> getImages(int itemId, Format format) {
+    return imageRepository.findByItemIdAndFormat(itemId, format);
+  }
+
+  @Override
+  public List<Image> getImages(int itemId, Format format, Pageable pageable) {
+    return imageRepository.findByItemIdAndFormat(itemId, format, pageable);
   }
 
   @Override

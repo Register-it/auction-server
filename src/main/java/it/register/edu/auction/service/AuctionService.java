@@ -21,7 +21,13 @@ public interface AuctionService {
 
   List<Bid> getBids(int itemId);
 
+  int getBidsNumber(int itemId);
+
   Map<Integer, Integer> getBidsNumber(Collection<Integer> itemIds);
+
+  List<Image> getImages(int itemId, Format format);
+
+  List<Image> getImages(int itemId, Format format, Pageable pageable);
 
   Map<Integer, List<Image>> getImages(Collection<Integer> itemIds, Format format);
 

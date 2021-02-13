@@ -62,4 +62,8 @@ public class WatchlistServiceImpl implements WatchlistService {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public boolean isInWatchlist(int userId, int itemId) {
+    return watchlistRepository.existsById(new WatchlistId(userId, itemId));
+  }
 }

@@ -4,7 +4,6 @@ import graphql.kickstart.tools.GraphQLResolver;
 import it.register.edu.auction.domain.LimitedPageRequest;
 import it.register.edu.auction.entity.Item;
 import it.register.edu.auction.entity.User;
-import it.register.edu.auction.resolver.root.QueryResolver;
 import it.register.edu.auction.service.AuctionService;
 import it.register.edu.auction.service.WatchlistService;
 import java.util.List;
@@ -38,6 +37,6 @@ public class UserResolver implements GraphQLResolver<User> {
   }
 
   private Pageable pageable(Integer limit) {
-    return LimitedPageRequest.of(0, limit, maxItems, QueryResolver.ITEM_DEFAULT_SORT);
+    return LimitedPageRequest.of(0, limit, maxItems);
   }
 }

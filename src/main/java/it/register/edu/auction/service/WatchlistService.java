@@ -18,4 +18,5 @@ public interface WatchlistService {
 
   List<Boolean> areInWatchlist(int userId, Collection<Integer> itemIds);
 
+  boolean isInWatchlist(int userId, int itemId);
 }

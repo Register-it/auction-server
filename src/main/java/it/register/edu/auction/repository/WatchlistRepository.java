@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface WatchlistRepository extends JpaRepository<WatchlistEntry, WatchlistId> {
 
   List<WatchlistEntry> findByUserIdAndItemIdIn(int userId, Collection<Integer> itemIds);
-
+  
 }
