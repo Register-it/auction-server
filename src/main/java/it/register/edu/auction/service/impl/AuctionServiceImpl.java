@@ -92,6 +92,11 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
+  public Optional<User> getUser(int userId) {
+    return userRepository.findById(userId);
+  }
+
+  @Override
   public Map<Integer, User> getUsers(Collection<Integer> userIds) {
     return userRepository.findAllById(userIds)
         .stream()

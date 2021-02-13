@@ -145,29 +145,6 @@ type Query {
 }
 
 type Mutation {
-    "Sign in the user identified by the given credentials"
-    login(
-        "Username identifying the user that is logging in"
-        username: String!,
-        "Password of the user that is logging in"
-        password: String!
-    ): Boolean
-
-    "Logs out the current user"
-    logout: Boolean
-
-    "Adds an item to the watchlist of the current logged in user"
-    watch(
-        "Id of the item to watch"
-        itemId: ID!
-    ): Boolean
-
-    "Removes an item from the watchlist of the current logged in user"
-    unwatch(
-        "Id of the item"
-        itemId: ID!
-    ): Boolean
-
     "Make a bid for an item, returns the last valid bid for this auction (if any)"
     bid(
         "Id of the item"
