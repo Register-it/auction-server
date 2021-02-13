@@ -33,7 +33,7 @@ public class GraphQLConfig {
         .build();
   }
 
-  @Bean
+  
   public GraphQLScalarType urlScalar() {
     return GraphQLScalarType.newScalar()
         .name("URL")
